@@ -11,6 +11,8 @@ const shortLineWidth = 24;
 let headingAndEndingLinesWidth = longLineWidth;
 
 
+const printJavascriptObject = require('./utils/print-javascript-object'); // eslint-disable-line no-unused-vars
+
 module.exports = function printGulpPluginErrorBeautifully(error, basePathToShortenPrintedFilePaths) {
 	const errorParser = choosePluginErrorParseAccordingToInvolvedPluginName(error.plugin);
 	if (typeof errorParser === 'function') {
@@ -20,6 +22,8 @@ module.exports = function printGulpPluginErrorBeautifully(error, basePathToShort
 			printErrorTheComplexWay(error.plugin, parsedStructure, basePathToShortenPrintedFilePaths);
 			return;
 		}
+	// } else {
+		// printJavascriptObject(error);
 	}
 
 	printErrorTheSimpleWay(error);
