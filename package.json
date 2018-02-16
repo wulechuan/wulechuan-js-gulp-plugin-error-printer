@@ -1,6 +1,6 @@
 {
   "name": "@wulechuan/javascript-gulp-plugin-error-printer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Parse and print gulp {PluginError} beautifully.",
   "author": "wulechuan <wulechuan@live.com>",
   "license": "WTFPL",
@@ -26,9 +26,10 @@
   "directories": {
     "example": "examples"
   },
-  "dependencies": {},
+  "dependencies": {
+    "chalk": "^2.3.1"
+  },
   "devDependencies": {
-    "chalk": "^2.3.1",
     "eslint": "^4.17.0",
     "gulp": "^3.9.1",
     "gulp-stylus": "^2.7.0",
