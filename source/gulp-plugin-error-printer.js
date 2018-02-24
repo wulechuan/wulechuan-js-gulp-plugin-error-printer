@@ -92,8 +92,20 @@ function printConclusionMessageIfAny(errorMessage) {
 }
 
 function printHeaderForOneItemInStack(fileFullPath, lineNumber, columnNumber, basePathToShortenPrintedFilePaths) {
+	if (! fileFullPath || typeof fileFullPath !== 'string') {
+		return;
+	}
+
 	if (typeof basePathToShortenPrintedFilePaths !== 'string') {
 		basePathToShortenPrintedFilePaths = '';
+	}
+
+	if (! lineNumber && lineNumber !== 0) {
+		lineNumber = '<Unknown>';
+	}
+
+	if (! columnNumber && columnNumber !== 0) {
+		columnNumber = '<Unknown>';
 	}
 
 
