@@ -8,62 +8,119 @@ const pump = require('pump');
 const compileStylus = require('gulp-stylus');
 const uglifyJavascript = require('gulp-uglify');
 
-const printGulpErrorBeautifully = require('./source/gulp-plugin-error-printer');
+
+const printGulpPluginErrorBeautifully = require('.');
+
+/*
+*
+*
+*
+*
+*
+*
+* ****************************************
+*               整理环境常量
+*             Env. Constants
+* ****************************************
+*/
+
+// --------------- 基本常量 (Basic) ---------------
+
+const npmProjectRootPath = process.cwd();
+const packageJSON = require(joinPath(npmProjectRootPath, 'package.json')); // eslint-disable-line import/no-dynamic-require
+
+const {
+	example: exampleSourceFileBasePath,
+} = packageJSON.directories;
+
+const basePathToShortenPrintedFilePaths = exampleSourceFileBasePath;
 
 
+// --------------- globs ---------------
 
-const sourceFileBasePath = './examples';
-const basePathToShortenPrintedFilePaths = sourceFileBasePath;
+const sourceGlobsCSSStylusEntries = [
+	joinPath(exampleSourceFileBasePath, 'css-stylus/source.styl'),
+];
 
-gulp.task('build: css: stylus', () => {
-	return gulp.src(joinPath(sourceFileBasePath, 'css-stylus/source.styl'))
+const sourceGlobsJavascriptBuildingEntries = [
+	joinPath(exampleSourceFileBasePath, 'js-uglify/wulechuan.js'),
+];
+
+/*
+*
+*
+*
+*
+*
+*
+* ****************************************
+*                  任务集
+*                  Tasks
+* ****************************************
+*/
+
+// When utilizing the `on('error')` method of a gulp's vinyl-fs instance,
+// the error will propagate outside the event handler.
+// And will finally get printed the traditional way.
+// Since this logger also prints the error, the error is printed **twice**.
+
+gulp.task('build: css: stylus (1)', () => {
+	return gulp.src(sourceGlobsCSSStylusEntries)
 		.pipe(compileStylus())
 		.on('error', theError => {
-			printGulpErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
 		});
 });
+
+gulp.task('build: js: uglify (1)', () => {
+	return gulp.src(sourceGlobsJavascriptBuildingEntries)
+		.pipe(uglifyJavascript())
+		.on('error', theError => {
+			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+		});
+});
+
+
+
 
 gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
 	const taskSteps = [];
 
-	taskSteps.push(gulp.src(joinPath(sourceFileBasePath, 'css-stylus/source.styl')));
+	taskSteps.push(gulp.src(sourceGlobsCSSStylusEntries));
 	taskSteps.push(compileStylus());
 
 	pump(taskSteps, (theError) => {
 		if (theError) {
-			printGulpErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
 		}
 
 		thisTaskIsDone();
 	});
-});
-
-gulp.task('build: js: uglify', () => {
-	return gulp.src(joinPath(sourceFileBasePath, 'js-uglify/wulechuan.js'))
-		.pipe(uglifyJavascript())
-		.on('error', theError => {
-			printGulpErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
-		});
 });
 
 gulp.task('build: js: uglify (2)', (thisTaskIsDone) => {
 	const taskSteps = [];
 
-	taskSteps.push(gulp.src(joinPath(sourceFileBasePath, 'js-uglify/wulechuan.js')));
+	taskSteps.push(gulp.src(sourceGlobsJavascriptBuildingEntries));
 	taskSteps.push(uglifyJavascript());
 
 	pump(taskSteps, (theError) => {
 		if (theError) {
-			printGulpErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
 		}
 
 		thisTaskIsDone();
 	});
 });
 
+
+
+
+
+// The default task
 gulp.task('default', [
-	// 'build: css: stylus',
+	// 'build: css: stylus (1)',
 	'build: css: stylus (2)',
-	// 'build: js: uglify',
+	// 'build: js: uglify (1)',
 	'build: js: uglify (2)',
 ]);

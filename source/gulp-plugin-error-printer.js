@@ -61,6 +61,7 @@ function printShortLine() {
 function printErrorAbstractInfo(involvedPluginName, errorTypeString) {
 	headingAndEndingLinesWidth = 'HH:mm:ss '.length + involvedPluginName.length + 2 + errorTypeString.length + 2;
 
+	console.log('\n'.repeat(2));
 	printLine(headingAndEndingLinesWidth, 'red');
 
 	console.log(`${
@@ -72,15 +73,13 @@ function printErrorAbstractInfo(involvedPluginName, errorTypeString) {
 	} ${chalk.gray('╳')}`);
 
 	printLine(headingAndEndingLinesWidth, 'red');
-
-	console.log('');
 }
 
 function printErrorEndingInfo(involvedPluginName, errorTypeString) {
 	printLine(headingAndEndingLinesWidth, 'red');
 	console.log(chalk.red(`  End of  ${chalk.white(involvedPluginName)}  ${errorTypeString}`));
 	printLine(headingAndEndingLinesWidth, 'red');
-	console.log('\n'.repeat(0));
+	console.log('\n'.repeat(2));
 }
 
 function printConclusionMessageIfAny(errorMessage) {

@@ -1,6 +1,6 @@
 {
   "name": "@wulechuan/javascript-gulp-plugin-error-printer",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Parse and print gulp {PluginError} beautifully.",
   "author": "wulechuan <wulechuan@live.com>",
   "license": "WTFPL",
@@ -12,6 +12,10 @@
     "beautify"
   ],
   "main": "source/gulp-plugin-error-printer.js",
+  "directories": {
+    "example": "examples"
+  },
+  "homepage": "https://github.com/wulechuan/javascript-wulechuan-gulp-plugin-error-printer#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wulechuan/javascript-wulechuan-gulp-plugin-error-printer.git"
@@ -19,12 +23,8 @@
   "bugs": {
     "url": "https://github.com/wulechuan/javascript-wulechuan-gulp-plugin-error-printer/issues"
   },
-  "homepage": "https://github.com/wulechuan/javascript-wulechuan-gulp-plugin-error-printer#readme",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "directories": {
-    "example": "examples"
   },
   "dependencies": {
     "chalk": "^2.3.1"

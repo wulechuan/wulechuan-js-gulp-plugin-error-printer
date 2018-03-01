@@ -1,0 +1,5 @@
+.vscode
+.eslintrc*
+/docs
+/examples
+/gulpfile.js
