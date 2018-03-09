@@ -99,9 +99,17 @@ npm i
 #### Run the Tryout Script
 
 Open a console/terminal and run:
+
+```sh
+npm start
+```
+
+or even simpler:
+
 ```sh
 gulp
 ```
+
 That's it.
 
 <br/>

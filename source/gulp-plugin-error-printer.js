@@ -4,7 +4,6 @@
 const pathTool = require('path');
 
 const chalk = require('chalk');
-const moment = require('moment');
 
 const longLineWidth  = 51;
 const shortLineWidth = 24;
@@ -65,7 +64,7 @@ function printErrorAbstractInfo(involvedPluginName, errorTypeString) {
 	printLine(headingAndEndingLinesWidth, 'red');
 
 	console.log(`${
-		chalk.gray(moment().format('HH:mm:ss'))
+		chalk.gray(formatTimestamp(Date.now()))
 	} ${
 		chalk.bgWhite.black(` ${involvedPluginName} `)
 	}${
@@ -288,3 +287,18 @@ function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, basePa
 
 	printErrorEndingInfo(involvedGulpPluginName, parsedStructure.errorType);
 }
+
+function formatTimestamp(timestamp) {
+	const dateObjectOfTheTime = new Date(timestamp);
+
+	const hours   = dateObjectOfTheTime.getHours();
+	const minutes = dateObjectOfTheTime.getMinutes();
+	const seconds = dateObjectOfTheTime.getSeconds();
+
+	return [
+		hours   < 10 ? `0${hours}`   : `${hours}`,
+		minutes < 10 ? `0${minutes}` : `${minutes}`,
+		seconds < 10 ? `0${seconds}` : `${seconds}`,
+	].join(':');
+}
+
