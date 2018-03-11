@@ -116,8 +116,8 @@ That's it.
 
 ### A Console Logging Snapshot of Mine
 
-Here are a snapshot of my console,
-hosted within Microsoft Visual Studio Code.
+Below is a snapshot of my console,
+hosted within Microsoft [Visual Studio Code](https://code.visualstudio.com/).
 
 A Stylus compilation error and an UglifyJs error.
 ![A Stylus compilation error and an UglifyJs error](./docs/illustrates/gulp-plugin-error-printer-examples.png "A Stylus compilation error and an UglifyJs error")
