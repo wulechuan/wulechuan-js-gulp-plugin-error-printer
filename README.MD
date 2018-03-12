@@ -19,8 +19,9 @@ as long as a parser is provided for that specific type of PluginError.
 
 ## Supported Plugins So Far
 
-* [gulp-uglify](https://github.com/terinjokes/gulp-uglify)
-* [gulp-stylus](https://github.com/stevelacy/gulp-stylus)
+* [gulp-uglify](https://www.npmjs.com/package/gulp-uglify)
+* [gulp-stylus](https://www.npmjs.com/package/gulp-stylus)
+* [gulp-less](https://www.npmjs.com/package/gulp-less)
 
 For those not supported errors,
 the error log from this logging plugin will naturally fallback to original formation.
@@ -121,6 +122,16 @@ hosted within Microsoft [Visual Studio Code](https://code.visualstudio.com/).
 
 A Stylus compilation error and an UglifyJs error.
 ![A Stylus compilation error and an UglifyJs error](./docs/illustrates/gulp-plugin-error-printer-examples.png "A Stylus compilation error and an UglifyJs error")
+
+<br/>
+<br/>
+
+## Configurations
+
+Currently only colors are configurable.
+So you may call if "color theme configurations" if you prefer.
+
+See [configurations.md](./docs/configurations.md).
 
 <br/>
 <br/>
