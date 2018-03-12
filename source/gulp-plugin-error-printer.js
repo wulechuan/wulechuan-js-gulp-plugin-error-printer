@@ -9,8 +9,16 @@ const longLineWidth  = 51;
 const shortLineWidth = 24;
 let headingAndEndingLinesWidth = longLineWidth;
 
+const defaultConfigurations = require('./configurations');
+const configurations = {
+	...defaultConfigurations,
+};
+
+const { colorTheme } = configurations;
+
 
 const printJavascriptObject = require('./utils/print-javascript-object'); // eslint-disable-line no-unused-vars
+
 
 module.exports = function printGulpPluginErrorBeautifully(error, basePathToShortenPrintedFilePaths) {
 	const errorParser = choosePluginErrorParseAccordingToInvolvedPluginName(error.plugin);
@@ -22,7 +30,8 @@ module.exports = function printGulpPluginErrorBeautifully(error, basePathToShort
 			return;
 		}
 	// } else {
-		// printJavascriptObject(error);
+	// 	printJavascriptObject(error);
+	// 	return;
 	}
 
 	printErrorTheSimpleWay(error);
@@ -39,7 +48,7 @@ function choosePluginErrorParseAccordingToInvolvedPluginName(pluginName) {
 			return require('./gulp-plugin-error-parsers/gulp-less-error-parser');
 	}
 
-	console.log(`Unknown plugin name "${pluginName}"`);
+	console.log(`Unspported plugin "${pluginName}"`);
 
 	return null;
 }
@@ -63,30 +72,76 @@ function printErrorAbstractInfo(involvedPluginName, errorTypeString) {
 	headingAndEndingLinesWidth = 'HH:mm:ss '.length + involvedPluginName.length + 2 + errorTypeString.length + 2;
 
 	console.log('\n'.repeat(2));
-	printLine(headingAndEndingLinesWidth, 'red');
+	printLine(headingAndEndingLinesWidth, colorTheme.heading.lineColor);
 
 	console.log(`${
-		chalk.gray(formatTimestamp(Date.now()))
+		shadingString(
+			formatTimestamp(Date.now()),
+			colorTheme.timestampTextColor
+		)
 	} ${
-		chalk.bgWhite.black(` ${involvedPluginName} `)
+		shadingString(
+			` ${involvedPluginName} `,
+			colorTheme.heading.invlovedPluginNameTextColor,
+			colorTheme.heading.invlovedPluginNameBgndColor
+		)
 	}${
-		chalk.bgMagenta.black(` ${errorTypeString} `)
-	} ${chalk.gray('╳')}`);
+		shadingString(
+			` ${errorTypeString} `,
+			colorTheme.heading.errorTypeInfoTextColor,
+			colorTheme.heading.errorTypeInfoBgndColor
+		)
+	} ${
+		shadingString(
+			'╳',
+			colorTheme.lineTailSymbolTextColor
+		)
+	}`);
 
-	printLine(headingAndEndingLinesWidth, 'red');
+	printLine(headingAndEndingLinesWidth, colorTheme.heading.lineColor);
 }
 
 function printErrorEndingInfo(involvedPluginName, errorTypeString) {
-	printLine(headingAndEndingLinesWidth, 'red');
-	console.log(chalk.red(`  End of  ${chalk.white(involvedPluginName)}  ${errorTypeString}`));
-	printLine(headingAndEndingLinesWidth, 'red');
+	printLine(headingAndEndingLinesWidth, colorTheme.ending.lineColor);
+
+	console.log(`${
+		shadingString(
+			'  End of ',
+			colorTheme.ending.normalTextColor
+		)
+	}${
+		shadingString(
+			` ${involvedPluginName} `,
+			colorTheme.ending.invlovedPluginNameTextColor,
+			colorTheme.ending.invlovedPluginNameBgndColor
+		)
+	}${
+		shadingString(
+			` ${errorTypeString} `,
+			colorTheme.ending.errorTypeInfoTextColor,
+			colorTheme.ending.errorTypeInfoBgndColor
+		)
+	}`);
+
+	printLine(headingAndEndingLinesWidth, colorTheme.ending.lineColor);
+
 	console.log('\n'.repeat(2));
 }
 
 function printConclusionMessageIfAny(errorMessage) {
 	if (errorMessage) {
-		console.log(`${chalk.bgYellow.black(' Error Message ')} ${
-			chalk.yellow(errorMessage)
+		console.log(`${
+			shadingString(
+				' Error Message ',
+				colorTheme.conclusionMessage.labelTextColor,
+				colorTheme.conclusionMessage.labelBgndColor
+			)
+		} ${
+			shadingString(
+				errorMessage,
+				colorTheme.conclusionMessage.messageTextColor,
+				colorTheme.conclusionMessage.messageBgndColor
+			)
 		}`);
 	}
 }
@@ -115,7 +170,12 @@ function printHeaderForOneItemInStack(fileFullPath, lineNumber, columnNumber, ba
 	// Besides, unfortunetly, in Microsoft VSCode, so far the version 1.20.0,
 	// the file path must be short enough, or the console being wide enough,
 	// so that the file path displays with a single line, can the said file path be clicked.
-	console.log(`Clickable linkage:\n${chalk.gray(fileFullPath)}\n`);
+	console.log(`Clickable linkage:\n${
+		shadingString(
+			fileFullPath,
+			colorTheme.fileInfo.clickableLinkageTextColor
+		)
+	}\n`);
 
 
 
@@ -131,24 +191,123 @@ function printHeaderForOneItemInStack(fileFullPath, lineNumber, columnNumber, ba
 	leafFolderParentPath = `${leafFolderParentPath}${pathTool.sep}`;
 
 	console.log(`File Path: ${
-		chalk.gray(leafFolderParentPath)
+		shadingString(
+			leafFolderParentPath,
+			colorTheme.fileInfo.pathNormalTextColor
+		)
 	}${
-		chalk.blue(leafFolder)
+		shadingString(
+			leafFolder,
+			colorTheme.fileInfo.pathLeafFolderTextColor
+		)
 	}${
-		chalk.gray(pathTool.sep)
+		shadingString(
+			pathTool.sep,
+			colorTheme.fileInfo.pathNormalTextColor
+		)
 	}\nFile Name: ${
-		chalk.magenta(fileBaseName)
+		shadingString(
+			fileBaseName,
+			colorTheme.fileInfo.fileNameTextColor
+		)
 	}\nLine: ${
-		chalk.green(lineNumber)
+		shadingString(
+			lineNumber,
+			colorTheme.fileInfo.lineNumberTextColor
+		)
 	}, Column: ${
-		chalk.green(columnNumber)
+		shadingString(
+			columnNumber,
+			colorTheme.fileInfo.columnNumberTextColor
+		)
 	}`);
 
 	printShortLine();
 }
 
+function printInvolvedSnippetLinesInAnArray(snippetLines, keyLineIndexInTheArray, errorColumnNumber, shouldPrependLineNumbers, errorLineNumber) {
+	const gutterLeadingSpacesCountIfGutterIsEnabled = 2;
+	const gutterLeadingSpacesIfGutterIsEnabled = ' '.repeat(gutterLeadingSpacesCountIfGutterIsEnabled);
 
-function parseAndPrintDetailOfTopMostStack(involvedSnippetPlusRawErrorMessage) {
+	let maxLineNumberOfSnippet;
+	let maxLineNumberStringWidthOfSnippet = 0;
+	let gutterWidth = 0;
+	let isAbleToBuildGutter = false;
+
+	if (shouldPrependLineNumbers && errorLineNumber > 0) {
+		isAbleToBuildGutter = true;
+		maxLineNumberOfSnippet = snippetLines.length - keyLineIndexInTheArray + errorLineNumber;
+		maxLineNumberStringWidthOfSnippet = `${maxLineNumberOfSnippet}`.length;
+		gutterWidth = gutterLeadingSpacesCountIfGutterIsEnabled + `${maxLineNumberOfSnippet}| `.length;
+	}
+
+	snippetLines.forEach((line, lineIndexInArray) => {
+		const isKeyLine = lineIndexInArray === keyLineIndexInTheArray;
+
+		let gutterString = '';
+		if (isAbleToBuildGutter) {
+			const currentLineNumber = (lineIndexInArray - keyLineIndexInTheArray + errorLineNumber);
+			const currentLineNumberString = `${currentLineNumber}`;
+			gutterString = `${
+				gutterLeadingSpacesIfGutterIsEnabled
+			}${
+				' '.repeat(maxLineNumberStringWidthOfSnippet - currentLineNumberString.length)
+			}${
+				currentLineNumber
+			}| `;
+		}
+
+		if (isKeyLine) {
+			const [ , leadingSpaces] = line.match(/^(\s*)\S/);
+
+			let waveLineLength;
+			let shouldPrintAnXAtWaveLineTail = true;
+
+			if (errorColumnNumber > 0) {
+				waveLineLength = Math.max(0, errorColumnNumber - leadingSpaces.length);
+			} else {
+				shouldPrintAnXAtWaveLineTail = false;
+				const lineLengthAfterItsLeadingSpaces = line.trim().length;
+				waveLineLength = lineLengthAfterItsLeadingSpaces;
+			}
+
+
+			console.log(shadingString(
+				`${gutterString}${line}`,
+				colorTheme.involvedSnippet.keyLineTextColor
+			));
+
+			console.log(`${
+				' '.repeat(gutterWidth)
+			}${
+				leadingSpaces
+			}${
+				shadingString(
+					'~'.repeat(waveLineLength),
+					colorTheme.involvedSnippet.keyLineDecorationLineColor
+				)
+			}${
+				shouldPrintAnXAtWaveLineTail
+					? shadingString(
+						'╳',
+						colorTheme.involvedSnippet.keyLineDecorationLineColor
+					)
+					: ''
+			}`);
+		} else {
+			console.log(shadingString(
+				`${gutterString}${line}`,
+				colorTheme.involvedSnippet.normalTextColor
+			));
+		}
+	});
+
+	if (snippetLines.length > 0) {
+		console.log('\n');
+	}
+}
+
+function parseAndPrintDetailOfTopMostStackTheDefaultWay(involvedSnippetPlusRawErrorMessage) {
 	if (! involvedSnippetPlusRawErrorMessage || typeof involvedSnippetPlusRawErrorMessage !== 'string') {
 		return;
 	}
@@ -179,15 +338,32 @@ function parseAndPrintDetailOfTopMostStack(involvedSnippetPlusRawErrorMessage) {
 	);
 
 	console.log(`${
-		snippetPart1
+		shadingString(
+			snippetPart1,
+			colorTheme.involvedSnippet.normalTextColor
+		)
 	}${
-		chalk.green(highlightedLine)
+		shadingString(
+			highlightedLine,
+			colorTheme.involvedSnippet.keyLineTextColor
+		)
 	}\n${
 		' '.repeat(gutterWidth)
 	}${
-		chalk.red(`${'~'.repeat(gulpArrowLine.length - gutterWidth - '\n'.length - '^'.length)}${chalk.red('╳')}`) // ▲
+		shadingString(
+			'~'.repeat(gulpArrowLine.length - gutterWidth - '\n'.length - '^'.length),
+			colorTheme.involvedSnippet.keyLineDecorationLineColor
+		)
 	}${
-		snippetPart2
+		shadingString(
+			'╳', // ▲
+			colorTheme.involvedSnippet.keyLineDecorationLineColor
+		)
+	}${
+		shadingString(
+			snippetPart2,
+			colorTheme.involvedSnippet.normalTextColor
+		)
 	}`);
 
 	printConclusionMessageIfAny(rawErrorMessageOfTopMostStack);
@@ -200,7 +376,18 @@ function printAllDeeperStackRecords(stacks, basePathToShortenPrintedFilePaths) {
 	}
 
 	if (stacks.length > 0) {
-		console.log(`\n\n${chalk.bgBlue.black(' ...more info in deeper stack ')} ${chalk.gray('>')}\n`);
+		console.log(`\n\n${
+			shadingString(
+				' ...more info in deeper stack ',
+				colorTheme.stackSectionLabel.textColor,
+				colorTheme.stackSectionLabel.bgndColor
+			)
+		} ${
+			shadingString(
+				'>',
+				colorTheme.lineTailSymbolTextColor
+			)
+		}\n`);
 	}
 
 	stacks.forEach(stack => {
@@ -238,7 +425,12 @@ function printAllDeeperStackRecords(stacks, basePathToShortenPrintedFilePaths) {
 			printHeaderForOneItemInStack(stackFilePath, stackFileLine, stackFileColumn, basePathToShortenPrintedFilePaths);
 		}
 
-		console.log(`${chalk.green(stackDetail)}\n\n`);
+		console.log(`${
+			shadingString(
+				stackDetail,
+				colorTheme.callingStacks.stackDetailTextColor
+			)
+		}\n\n`);
 	});
 }
 
@@ -264,7 +456,18 @@ function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, basePa
 	const { stackTopItem } = parsedStructure;
 
 	if (stackTopItem && typeof stackTopItem === 'object') {
-		console.log(`${chalk.bgBlue.black(' Statement in top most stack ')} ${chalk.gray('>')}\n`);
+		console.log(`${
+			shadingString(
+				' Statement in top most stack ',
+				colorTheme.stackSectionLabel.textColor,
+				colorTheme.stackSectionLabel.bgndColor
+			)
+		} ${
+			shadingString(
+				'>',
+				colorTheme.lineTailSymbolTextColor
+			)
+		}\n`);
 
 		printHeaderForOneItemInStack(
 			stackTopItem.path,
@@ -273,8 +476,21 @@ function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, basePa
 			basePathToShortenPrintedFilePaths
 		);
 
-		parseAndPrintDetailOfTopMostStack(stackTopItem.involvedSnippet);
+		if (Array.isArray(stackTopItem.involvedSnippet)) {
+			printInvolvedSnippetLinesInAnArray(
+				stackTopItem.involvedSnippet,
+				stackTopItem.involvedSnippetKeyLineIndexInTheArray,
+				stackTopItem.columnNumber,
+				true,
+				stackTopItem.lineNumber
+			);
+		} else {
+			// For some plugins, the conclusion message might contain inside snippets.
+			// In this case, the line below will print the included conclusion message.
+			parseAndPrintDetailOfTopMostStackTheDefaultWay(stackTopItem.involvedSnippet);
+		}
 
+		// For some other plugins, the conclusion message is provided separately.
 		printConclusionMessageIfAny(stackTopItem.conclusionMessage);
 	}
 
@@ -304,3 +520,24 @@ function formatTimestamp(timestamp) {
 	].join(':');
 }
 
+function shadingString(rawString, textColor, bgndColor) {
+	const textColorIsValid = !!textColor;
+	const bgndColorIsValid = !!bgndColor && bgndColor !== 'gray';
+
+	if (! textColorIsValid && ! bgndColorIsValid) {
+		return rawString;
+	}
+
+	let usedChalk = chalk;
+
+	if (bgndColorIsValid) {
+		const usedBgndColor = `bg${bgndColor.slice(0, 1).toUpperCase()}${bgndColor.slice(1)}`;
+		usedChalk = usedChalk[usedBgndColor];
+	}
+
+	if (textColorIsValid) {
+		usedChalk = usedChalk[textColor];
+	}
+
+	return usedChalk(rawString);
+}

@@ -5,7 +5,8 @@ function printLine(width, color) {
 }
 
 module.exports = function printObjectInfo(input) {
-	if (typeof input === 'undefined') {
+	const inputType = typeof input;
+	if (inputType === 'undefined') {
 		console.log(`${chalk.magenta('undefined')}`);
 		printLine();
 		console.log('\n'.repeat(3));
@@ -13,16 +14,8 @@ module.exports = function printObjectInfo(input) {
 		return;
 	}
 
-	if (isNaN(input)) {
-		console.log(`${chalk.magenta('NaN')}`);
-		printLine();
-		console.log('\n'.repeat(3));
-
-		return;
-	}
-
-	if (typeof input !== 'object') {
-		console.log(`${chalk.green('<simple value>')}: ${chalk.yellow(input.constructor.name)}`);
+	if (inputType !== 'object') {
+		console.log(`${chalk.green(`<${inputType}>`)}: ${chalk.yellow(input.constructor.name)}`);
 		console.log(input);
 		printLine();
 		console.log('\n'.repeat(3));
@@ -30,9 +23,8 @@ module.exports = function printObjectInfo(input) {
 		return;
 	}
 
-	if (! input && typeof input !== 'string' && typeof input !== 'number' && typeof input !== 'boolean') {
+	if (! input) {
 		console.log(`${chalk.green('<null>')}: ${chalk.yellow('Object')}`);
-		console.log(input);
 		printLine();
 		console.log('\n'.repeat(3));
 
@@ -44,8 +36,28 @@ module.exports = function printObjectInfo(input) {
 
 	const entries = Object.entries(input);
 	entries.forEach(entry => {
-		console.log(`${chalk.green(entry[0])}: ${chalk.yellow(entry[1].constructor.name)}`);
-		console.log(entry[1]);
+		const [ , value] = entry;
+		const valueType = typeof value;
+
+		let specialValueOrConstructorName;
+
+		if (valueType === 'undefined' || valueType === 'null') {
+			specialValueOrConstructorName = chalk.magenta(valueType);
+			return;
+		} else if (valueType === 'number' && isNaN(value)) {
+			specialValueOrConstructorName = `${chalk.yellow('Number')}:${chalk.magenta('NaN')}`;
+		} else {
+			specialValueOrConstructorName = chalk.yellow(value.constructor.name);
+		}
+
+		console.log(`${chalk.green(entry[0])}: ${specialValueOrConstructorName}`);
+
+		if (Array.isArray(value)) {
+			console.log(JSON.stringify(value, null, 4));
+		} else {
+			console.log(value);
+		}
+
 		printLine();
 		console.log('\n'.repeat(3));
 	});

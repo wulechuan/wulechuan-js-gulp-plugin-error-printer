@@ -40,11 +40,12 @@ module.exports = function parseGulpStylusPluginError(error) {
 		errorType: error.name,
 
 		stackTopItem: {
-			path:              stackTopItemFilePath,
-			lineNumber:        stackTopItemLineNumber,
-			columnNumber:      stackTopItemColumnNumber,
-			involvedSnippet:   snippetPlusRawMessageOfTopMostStackItem,
-			conclusionMessage: null,
+			path:                                  stackTopItemFilePath,
+			lineNumber:                            stackTopItemLineNumber,
+			columnNumber:                          stackTopItemColumnNumber,
+			involvedSnippet:                       snippetPlusRawMessageOfTopMostStackItem,
+			involvedSnippetKeyLineIndexInTheArray: NaN,
+			conclusionMessage:                     null,
 		},
 
 		deeperStacks: stacks,

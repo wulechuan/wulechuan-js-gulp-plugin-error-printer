@@ -3,50 +3,50 @@ module.exports = function parseGulpLESSPluginError(error) {
 		return null;
 	}
 
-	// require('../utils/print-javascript-object')(error);
+	// const print = require('../utils/print-javascript-object')(error); return;
 
-	const { message } = error;
+	const {
+		message,
+		type:     errorRawType,
+		filename: stackTopItemFilePath, // also available as fileName (camel case).
+		// index:    stackTopItemCharNumber,
+		line:     stackTopItemLineNumber, // aslo available as lineNumber.
+		column:   stackTopItemColumnNumber,
+		// callLine, // might be NaN
+		// callExtract, // might be undefined
+		extract: involvedSnippet, // an array
+	} = error;
 
 	if (! message) {
 		return null;
 	}
 
-	const posOfRestPart =  message.indexOf('\n');
-	const restPartOfMessage = message.slice(posOfRestPart);
-	const stacks = restPartOfMessage.split('    at ');
-	const [ snippetPlusRawMessageOfTopMostStackItem ] = stacks.splice(0, 1);
-
-	let stackTopItemFilePath = error.filename;
-	let stackTopItemLineNumber = error.lineno;
-	let stackTopItemColumnNumber = error.column;
-
-	if (! stackTopItemFilePath) {
-		const firstFilePathMatchingResult = message.match(/([\s\S]+):(\d+):(\d+)\n/);
-		if (firstFilePathMatchingResult) {
-			[
-				,
-				stackTopItemFilePath,
-				stackTopItemLineNumber,
-				stackTopItemColumnNumber,
-			] = firstFilePathMatchingResult;
-		}
-	}
-
 	if (! stackTopItemFilePath) {
 		return null;
 	}
 
+
+
+	const posOfMessageUselessPart =  message.indexOf(` in file ${stackTopItemFilePath}`);
+	const conclusionMessage = message.slice(0, posOfMessageUselessPart);
+
 	return {
-		errorType: error.name,
+		errorType: `${errorRawType} Error`,
 
 		stackTopItem: {
-			path:              stackTopItemFilePath,
-			lineNumber:        stackTopItemLineNumber,
-			columnNumber:      stackTopItemColumnNumber,
-			involvedSnippet:   snippetPlusRawMessageOfTopMostStackItem,
-			conclusionMessage: null,
+			path:                                  stackTopItemFilePath,
+			lineNumber:                            stackTopItemLineNumber,
+			columnNumber:                          stackTopItemColumnNumber,
+			involvedSnippet:                       involvedSnippet,
+
+			// For gulp-less,
+			// the key line is always the second line,
+			// I **GUESS**.
+			involvedSnippetKeyLineIndexInTheArray: 1,
+
+			conclusionMessage,
 		},
 
-		deeperStacks: stacks,
+		deeperStacks: null,
 	};
 };

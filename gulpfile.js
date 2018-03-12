@@ -140,8 +140,8 @@ gulp.task('build: js: uglify (2)', (thisTaskIsDone) => {
 // The default task
 gulp.task('default', [
 	// 'build: css: stylus (1)',
-	// 'build: css: stylus (2)',
+	'build: css: stylus (2)',
 	'build: css: less (2)',
 	// 'build: js: uglify (1)',
-	// 'build: js: uglify (2)',
+	'build: js: uglify (2)',
 ]);

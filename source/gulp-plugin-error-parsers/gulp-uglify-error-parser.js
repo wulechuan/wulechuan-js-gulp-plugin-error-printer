@@ -19,11 +19,12 @@ module.exports = function parseGulpUglifyJsPluginError(error) {
 		errorType: `${error.name}:${cause.name}`,
 
 		stackTopItem: {
-			path: error.fileName,
-			lineNumber: cause.line,
-			columnNumber: cause.col,
-			involvedSnippet: null,
-			conclusionMessage: cause.message,
+			path:                                  error.fileName,
+			lineNumber:                            cause.line,
+			columnNumber:                          cause.col,
+			involvedSnippet:                       null,
+			involvedSnippetKeyLineIndexInTheArray: NaN,
+			conclusionMessage:                     cause.message,
 		},
 
 		deeperStacks: stackUsefulPart,
