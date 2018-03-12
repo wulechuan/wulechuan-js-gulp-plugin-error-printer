@@ -124,7 +124,7 @@ hosted within Microsoft [Visual Studio Code](https://code.visualstudio.com/).
 
 > By the way, the used color theme of my Visual Studio Code,
 > shown in the illustrates below,
-> is the "[Panda Theme]()".
+> is the "[Panda Theme](http://panda.siamak.work/)".
 
 A Stylus compilation error.
 ![A Stylus compilation error](./docs/illustrates/example-an-printed-error-of-gulp-stylus.png "A Stylus compilation error")
