@@ -1,6 +1,8 @@
 # NPM Page
 
-[@wulechuan/javascript-gulp-plugin-error-printer](https://www.npmjs.com/package/@wulechuan/javascript-gulp-plugin-error-printer)
+Package Name: [@wulechuan/javascript-gulp-plugin-error-printer](https://www.npmjs.com/package/@wulechuan/javascript-gulp-plugin-error-printer)
+
+Author: 南昌吴乐川
 
 <br/>
 <br/>
