@@ -35,6 +35,8 @@ function choosePluginErrorParseAccordingToInvolvedPluginName(pluginName) {
 			return require('./gulp-plugin-error-parsers/gulp-uglify-error-parser');
 		case 'gulp-stylus':
 			return require('./gulp-plugin-error-parsers/gulp-stylus-error-parser');
+		case 'gulp-less':
+			return require('./gulp-plugin-error-parsers/gulp-less-error-parser');
 	}
 
 	console.log(`Unknown plugin name "${pluginName}"`);

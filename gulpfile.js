@@ -6,6 +6,7 @@ const gulp = require('gulp');
 const pump = require('pump');
 
 const compileStylus = require('gulp-stylus');
+const compileLESS = require('gulp-less');
 const uglifyJavascript = require('gulp-uglify');
 
 
@@ -40,6 +41,10 @@ const basePathToShortenPrintedFilePaths = exampleSourceFileBasePath;
 
 const sourceGlobsCSSStylusEntries = [
 	joinPath(exampleSourceFileBasePath, 'css-stylus/source.styl'),
+];
+
+const sourceGlobsCSSLESSEntries = [
+	joinPath(exampleSourceFileBasePath, 'css-less/wulechuan.less'),
 ];
 
 const sourceGlobsJavascriptBuildingEntries = [
@@ -98,6 +103,21 @@ gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
 	});
 });
 
+gulp.task('build: css: less (2)', (thisTaskIsDone) => {
+	const taskSteps = [];
+
+	taskSteps.push(gulp.src(sourceGlobsCSSLESSEntries));
+	taskSteps.push(compileLESS());
+
+	pump(taskSteps, (theError) => {
+		if (theError) {
+			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+		}
+
+		thisTaskIsDone();
+	});
+});
+
 gulp.task('build: js: uglify (2)', (thisTaskIsDone) => {
 	const taskSteps = [];
 
@@ -120,7 +140,8 @@ gulp.task('build: js: uglify (2)', (thisTaskIsDone) => {
 // The default task
 gulp.task('default', [
 	// 'build: css: stylus (1)',
-	'build: css: stylus (2)',
+	// 'build: css: stylus (2)',
+	'build: css: less (2)',
 	// 'build: js: uglify (1)',
-	'build: js: uglify (2)',
+	// 'build: js: uglify (2)',
 ]);

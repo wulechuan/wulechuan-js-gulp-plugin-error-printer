@@ -5,6 +5,22 @@ function printLine(width, color) {
 }
 
 module.exports = function printObjectInfo(input) {
+	if (typeof input === 'undefined') {
+		console.log(`${chalk.magenta('undefined')}`);
+		printLine();
+		console.log('\n'.repeat(3));
+
+		return;
+	}
+
+	if (isNaN(input)) {
+		console.log(`${chalk.magenta('NaN')}`);
+		printLine();
+		console.log('\n'.repeat(3));
+
+		return;
+	}
+
 	if (typeof input !== 'object') {
 		console.log(`${chalk.green('<simple value>')}: ${chalk.yellow(input.constructor.name)}`);
 		console.log(input);
@@ -14,7 +30,7 @@ module.exports = function printObjectInfo(input) {
 		return;
 	}
 
-	if (! input) {
+	if (! input && typeof input !== 'string' && typeof input !== 'number' && typeof input !== 'boolean') {
 		console.log(`${chalk.green('<null>')}: ${chalk.yellow('Object')}`);
 		console.log(input);
 		printLine();
