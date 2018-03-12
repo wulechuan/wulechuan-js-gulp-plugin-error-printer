@@ -99,4 +99,4 @@ module.exports = {
 
 # Appendix
 
-See also the [ReadMe.md](../Readme.md).
+See also the [README.MD](../README.MD).
