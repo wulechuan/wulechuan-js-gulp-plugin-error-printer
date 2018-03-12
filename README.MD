@@ -115,13 +115,23 @@ That's it.
 
 <br/>
 
-### A Console Logging Snapshot of Mine
+### Some Snapshots of Mine
 
-Below is a snapshot of my console,
+Below are some snapshots of my console,
 hosted within Microsoft [Visual Studio Code](https://code.visualstudio.com/).
 
-A Stylus compilation error and an UglifyJs error.
-![A Stylus compilation error and an UglifyJs error](./docs/illustrates/gulp-plugin-error-printer-examples.png "A Stylus compilation error and an UglifyJs error")
+> By the way, the used color theme of my Visual Studio Code,
+> shown in the illustrates below,
+> is the "[Panda Theme]()".
+
+A Stylus compilation error.
+![A Stylus compilation error](./docs/illustrates/example-an-printed-error-of-gulp-stylus.png "A Stylus compilation error")
+
+A LESSCSS compilation error.
+![A LESSCSS compilation error](./docs/illustrates/example-an-printed-error-of-gulp-less.png "A LESSCSS compilation error")
+
+A UglifyJs parsing error.
+![A LESSCSS compilation error](./docs/illustrates/example-an-printed-error-of-gulp-uglify.png "A LESSCSS compilation error")
 
 <br/>
 <br/>

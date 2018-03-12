@@ -1,6 +1,6 @@
 {
   "name": "@wulechuan/javascript-gulp-plugin-error-printer",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Parse and print gulp {PluginError} beautifully.",
   "author": "wulechuan <wulechuan@live.com>",
   "license": "WTFPL",
