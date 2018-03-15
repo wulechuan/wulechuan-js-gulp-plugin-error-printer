@@ -46,6 +46,8 @@ function choosePluginErrorParseAccordingToInvolvedPluginName(pluginName) {
 			return require('./gulp-plugin-error-parsers/gulp-stylus-error-parser');
 		case 'gulp-less':
 			return require('./gulp-plugin-error-parsers/gulp-less-error-parser');
+		case 'gulp-sass':
+			return require('./gulp-plugin-error-parsers/gulp-sass-error-parser');
 	}
 
 	console.log(`Unspported plugin "${pluginName}"`);
@@ -138,11 +140,16 @@ function printConclusionMessageIfAny(errorMessage) {
 			)
 		} ${
 			shadingString(
+				':',
+				colorTheme.lineTailSymbolTextColor
+			)
+		}\n\n${
+			shadingString(
 				errorMessage,
 				colorTheme.conclusionMessage.messageTextColor,
 				colorTheme.conclusionMessage.messageBgndColor
 			)
-		}`);
+		}\n`);
 	}
 }
 
@@ -260,15 +267,15 @@ function printInvolvedSnippetLinesInAnArray(snippetLines, keyLineIndexInTheArray
 		if (isKeyLine) {
 			const [ , leadingSpaces] = line.match(/^(\s*)\S/);
 
-			let waveLineLength;
+			let errorDecorationLineLength;
 			let shouldPrintAnXAtWaveLineTail = true;
 
 			if (errorColumnNumber > 0) {
-				waveLineLength = Math.max(0, errorColumnNumber - leadingSpaces.length);
+				errorDecorationLineLength = Math.max(0, errorColumnNumber - leadingSpaces.length - 1);
 			} else {
 				shouldPrintAnXAtWaveLineTail = false;
 				const lineLengthAfterItsLeadingSpaces = line.trim().length;
-				waveLineLength = lineLengthAfterItsLeadingSpaces;
+				errorDecorationLineLength = lineLengthAfterItsLeadingSpaces;
 			}
 
 
@@ -283,7 +290,7 @@ function printInvolvedSnippetLinesInAnArray(snippetLines, keyLineIndexInTheArray
 				leadingSpaces
 			}${
 				shadingString(
-					'~'.repeat(waveLineLength),
+					'~'.repeat(errorDecorationLineLength),
 					colorTheme.involvedSnippet.keyLineDecorationLineColor
 				)
 			}${
@@ -323,17 +330,17 @@ function parseAndPrintDetailOfTopMostStackTheDefaultWay(involvedSnippetPlusRawEr
 
 	const rawErrorMessageOfTopMostStack = involvedSnippetPlusRawErrorMessage.slice(posOfRawErrorMessageOfLastFile);
 
-	const matchingResultOfArrowLine = involvedSnippetPlusRawErrorMessage.match(/(\n-{5,}\^)\n/);
-	const [ , gulpArrowLine] = matchingResultOfArrowLine;
-	const posOfGulpArrowLine = involvedSnippetPlusRawErrorMessage.indexOf(gulpArrowLine);
+	const matchingResultOfDecorationLine = involvedSnippetPlusRawErrorMessage.match(/(\n-{5,}\^)\n/);
+	const [ , errorDecorationLine] = matchingResultOfDecorationLine;
+	const posOfErrorDecorationLine = involvedSnippetPlusRawErrorMessage.indexOf(errorDecorationLine);
 
-	const snippetPart1IncludingHighlightedLine = involvedSnippetPlusRawErrorMessage.slice(0, posOfGulpArrowLine);
+	const snippetPart1IncludingHighlightedLine = involvedSnippetPlusRawErrorMessage.slice(0, posOfErrorDecorationLine);
 
 	const allLinesOfSnippetPart1IncludingHighlightedLine = snippetPart1IncludingHighlightedLine.match(/\n[^\n]*/g);
 	const highlightedLine = allLinesOfSnippetPart1IncludingHighlightedLine.pop();
 	const snippetPart1 = allLinesOfSnippetPart1IncludingHighlightedLine.join('');
 	const snippetPart2 = involvedSnippetPlusRawErrorMessage.slice(
-		posOfGulpArrowLine + gulpArrowLine.length,
+		posOfErrorDecorationLine + errorDecorationLine.length,
 		posOfRawErrorMessageOfLastFile
 	);
 
@@ -351,7 +358,7 @@ function parseAndPrintDetailOfTopMostStackTheDefaultWay(involvedSnippetPlusRawEr
 		' '.repeat(gutterWidth)
 	}${
 		shadingString(
-			'~'.repeat(gulpArrowLine.length - gutterWidth - '\n'.length - '^'.length),
+			'~'.repeat(errorDecorationLine.length - gutterWidth - '\n'.length - '^'.length),
 			colorTheme.involvedSnippet.keyLineDecorationLineColor
 		)
 	}${
@@ -376,7 +383,7 @@ function printAllDeeperStackRecords(stacks, basePathToShortenPrintedFilePaths) {
 	}
 
 	if (stacks.length > 0) {
-		console.log(`\n\n${
+		console.log(`\n${
 			shadingString(
 				' ...more info in deeper stack ',
 				colorTheme.stackSectionLabel.textColor,

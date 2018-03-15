@@ -1,0 +1,9 @@
+@import 'mixins';
+
+$my-color: #790319;
+
+.wulechuan {
+    color: $my-color;
+    @include shading($my-color, blue, );
+    @include shading($background: white);
+}

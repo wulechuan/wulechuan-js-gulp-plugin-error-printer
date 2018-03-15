@@ -1,0 +1,19 @@
+@mixin shading($text-color: null, $brdr-color: null, $background: null) {
+    @if type-of($text-color) == 'color' {
+        color: $text-color;
+    }
+
+    @if type-of($brdr-color) == 'color' {
+        border-color: $brdr-color;
+    }
+
+    @if type-of($background) == 'color' {
+        background-color: $brdr-color;
+    }
+
+    @if type-of($background) == 'string' {
+        background-image: url(unquote($background));
+    }
+
+    @error('intended to be an error');
+}

@@ -3,7 +3,12 @@ module.exports = function parseGulpLESSPluginError(error) {
 		return null;
 	}
 
-	// const print = require('../utils/print-javascript-object')(error); return;
+	const shouldDebugErrorObject = false;
+	if (shouldDebugErrorObject) {
+		require('../utils/print-javascript-object')(error);
+		return;
+	}
+
 
 	const {
 		message,
@@ -37,7 +42,7 @@ module.exports = function parseGulpLESSPluginError(error) {
 			path:                                  stackTopItemFilePath,
 			lineNumber:                            stackTopItemLineNumber,
 			columnNumber:                          stackTopItemColumnNumber,
-			involvedSnippet:                       involvedSnippet,
+			involvedSnippet,
 
 			// For gulp-less,
 			// the key line is always the second line,

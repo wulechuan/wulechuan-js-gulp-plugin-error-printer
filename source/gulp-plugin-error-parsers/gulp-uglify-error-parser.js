@@ -3,6 +3,12 @@ module.exports = function parseGulpUglifyJsPluginError(error) {
 		return null;
 	}
 
+	const shouldDebugErrorObject = false;
+	if (shouldDebugErrorObject) {
+		require('../utils/print-javascript-object')(error);
+		return;
+	}
+
 	const { cause } = error;
 	if (typeof cause !== 'object') {
 		return null;

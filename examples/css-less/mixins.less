@@ -1,0 +1,19 @@
+.mixin-shading(@text-color: null; @brdr-color: null; @background: null;) {
+	& when (iscolor(@text-color)) {
+		color: @text-color;
+	}
+
+	& when (iscolor(@brdr-color)) {
+		border-color: @brdr-color;
+	}
+
+	& when (iscolor(@background)) {
+		background-color: @background;
+	}
+
+	& when (isurl(@background)) {
+		background-image: @background;
+    }
+    
+    :;
+}

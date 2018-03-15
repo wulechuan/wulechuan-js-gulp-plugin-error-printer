@@ -3,7 +3,11 @@ module.exports = function parseGulpStylusPluginError(error) {
 		return null;
 	}
 
-	// require('../utils/print-javascript-object')(error);
+	const shouldDebugErrorObject = false;
+	if (shouldDebugErrorObject) {
+		require('../utils/print-javascript-object')(error);
+		return;
+	}
 
 	const { message } = error;
 

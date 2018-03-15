@@ -7,6 +7,7 @@ const pump = require('pump');
 
 const compileStylus = require('gulp-stylus');
 const compileLESS = require('gulp-less');
+const compileSass = require('gulp-sass');
 const uglifyJavascript = require('gulp-uglify');
 
 
@@ -45,6 +46,10 @@ const sourceGlobsCSSStylusEntries = [
 
 const sourceGlobsCSSLESSEntries = [
 	joinPath(exampleSourceFileBasePath, 'css-less/wulechuan.less'),
+];
+
+const sourceGlobsCSSSassEntries = [
+	joinPath(exampleSourceFileBasePath, 'css-sass/wulechuan.scss'),
 ];
 
 const sourceGlobsJavascriptBuildingEntries = [
@@ -103,11 +108,26 @@ gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
 	});
 });
 
-gulp.task('build: css: less (2)', (thisTaskIsDone) => {
+gulp.task('build: css: LESS (2)', (thisTaskIsDone) => {
 	const taskSteps = [];
 
 	taskSteps.push(gulp.src(sourceGlobsCSSLESSEntries));
 	taskSteps.push(compileLESS());
+
+	pump(taskSteps, (theError) => {
+		if (theError) {
+			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+		}
+
+		thisTaskIsDone();
+	});
+});
+
+gulp.task('build: css: sass (2)', (thisTaskIsDone) => {
+	const taskSteps = [];
+
+	taskSteps.push(gulp.src(sourceGlobsCSSSassEntries));
+	taskSteps.push(compileSass());
 
 	pump(taskSteps, (theError) => {
 		if (theError) {
@@ -141,7 +161,8 @@ gulp.task('build: js: uglify (2)', (thisTaskIsDone) => {
 gulp.task('default', [
 	// 'build: css: stylus (1)',
 	'build: css: stylus (2)',
-	'build: css: less (2)',
+	'build: css: LESS (2)',
+	'build: css: sass (2)',
 	// 'build: js: uglify (1)',
 	'build: js: uglify (2)',
 ]);
