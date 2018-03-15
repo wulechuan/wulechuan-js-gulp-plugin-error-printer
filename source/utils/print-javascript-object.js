@@ -1,15 +1,19 @@
 const chalk = require('chalk');
 
+const blankLinesCountBetweenEntries = 1;
+
 function printLine(width, color) {
 	console.log(chalk[color || 'gray']('─'.repeat(width || 51)));
 }
+
+const blankLineCharsCountBetweenEntries = blankLinesCountBetweenEntries - 1;
 
 module.exports = function printObjectInfo(input) {
 	const inputType = typeof input;
 	if (inputType === 'undefined') {
 		console.log(`${chalk.magenta('undefined')}`);
 		printLine();
-		console.log('\n'.repeat(3));
+		console.log('\n'.repeat(blankLineCharsCountBetweenEntries));
 
 		return;
 	}
@@ -18,7 +22,7 @@ module.exports = function printObjectInfo(input) {
 		console.log(`${chalk.green(`<${inputType}>`)}: ${chalk.yellow(input.constructor.name)}`);
 		console.log(input);
 		printLine();
-		console.log('\n'.repeat(3));
+		console.log('\n'.repeat(blankLineCharsCountBetweenEntries));
 
 		return;
 	}
@@ -26,7 +30,7 @@ module.exports = function printObjectInfo(input) {
 	if (! input) {
 		console.log(`${chalk.green('<null>')}: ${chalk.yellow('Object')}`);
 		printLine();
-		console.log('\n'.repeat(3));
+		console.log('\n'.repeat(blankLineCharsCountBetweenEntries));
 
 		return;
 	}
@@ -59,6 +63,6 @@ module.exports = function printObjectInfo(input) {
 		}
 
 		printLine();
-		console.log('\n'.repeat(3));
+		console.log('\n'.repeat(blankLineCharsCountBetweenEntries));
 	});
 };

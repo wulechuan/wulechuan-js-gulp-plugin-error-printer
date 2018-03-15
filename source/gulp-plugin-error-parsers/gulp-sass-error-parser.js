@@ -40,7 +40,6 @@ module.exports = function parseGulpSassPluginError(error) {
 	}
 
 	const involvedSnippet = [ involvedErrorLine ];
-	console.dir(involvedSnippet);
 
 	return {
 		errorType: `${errorRawType}(${sassErrorStatusNumber})`,

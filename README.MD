@@ -1,8 +1,15 @@
-# NPM Page
+# NPM Package
 
-Package Name: [@wulechuan/javascript-gulp-plugin-error-printer](https://www.npmjs.com/package/@wulechuan/javascript-gulp-plugin-error-printer)
+<dl>
+<dt>Package Name</dt>
+<dd>
 
-Author: 南昌吴乐川
+[@wulechuan/javascript-gulp-plugin-error-printer](https://www.npmjs.com/package/@wulechuan/javascript-gulp-plugin-error-printer)
+
+</dd>
+<dt>Author</dt>
+<dd>南昌吴乐川</dd>
+</dl>
 
 <br/>
 <br/>
@@ -24,9 +31,10 @@ as long as a parser is provided for that specific type of PluginError.
 * [gulp-uglify](https://www.npmjs.com/package/gulp-uglify)
 * [gulp-stylus](https://www.npmjs.com/package/gulp-stylus)
 * [gulp-less](https://www.npmjs.com/package/gulp-less)
+* [gulp-sass](https://www.npmjs.com/package/gulp-sass)
 
 For those not supported errors,
-the error log from this logging plugin will naturally fallback to original formation.
+a beautify property detail list is logged for each.
 
 <br/>
 <br/>
@@ -132,8 +140,11 @@ A Stylus compilation error.
 A LESSCSS compilation error.
 ![A LESSCSS compilation error](./docs/illustrates/example-an-printed-error-of-gulp-less.png "A LESSCSS compilation error")
 
-A UglifyJs parsing error.
-![A LESSCSS compilation error](./docs/illustrates/example-an-printed-error-of-gulp-uglify.png "A LESSCSS compilation error")
+A Sass compilation error.
+![A Sass compilation error](./docs/illustrates/example-an-printed-error-of-gulp-sass.png "A Sass compilation error")
+
+An UglifyJS parsing error.
+![An UglifyJS parsing error](./docs/illustrates/example-an-printed-error-of-gulp-uglify.png "An UglifyJS parsing error")
 
 <br/>
 <br/>

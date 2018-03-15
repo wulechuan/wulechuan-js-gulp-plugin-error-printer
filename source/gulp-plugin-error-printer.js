@@ -29,9 +29,6 @@ module.exports = function printGulpPluginErrorBeautifully(error, basePathToShort
 			printErrorTheComplexWay(error.plugin, parsedStructure, basePathToShortenPrintedFilePaths);
 			return;
 		}
-	// } else {
-	// 	printJavascriptObject(error);
-	// 	return;
 	}
 
 	printErrorTheSimpleWay(error);
@@ -48,11 +45,10 @@ function choosePluginErrorParseAccordingToInvolvedPluginName(pluginName) {
 			return require('./gulp-plugin-error-parsers/gulp-less-error-parser');
 		case 'gulp-sass':
 			return require('./gulp-plugin-error-parsers/gulp-sass-error-parser');
+		default:
+			console.log(`\nUnspported plugin "${pluginName}"`);
+			return function() { return null; };
 	}
-
-	console.log(`Unspported plugin "${pluginName}"`);
-
-	return null;
 }
 
 function parseStacksStringIntoStacksArrayTheDefaultWay(stacksString) {
@@ -448,11 +444,20 @@ function printAllDeeperStackRecords(stacks, basePathToShortenPrintedFilePaths) {
 function printErrorTheSimpleWay(error) {
 	printErrorAbstractInfo(error.plugin, error.name);
 
-	if (typeof error.toString === 'function') {
-		console.log(error.toString());
-	} else {
-		console.log(error);
-	}
+	const errorToPrint = { ...error };
+	errorToPrint.__proto__ = {
+		constructor: error.constructor,
+	};
+
+	delete errorToPrint.__safety;
+
+	printJavascriptObject(errorToPrint);
+
+	// if (typeof error.toString === 'function') {
+	// 	console.log(error.toString());
+	// } else {
+	// 	console.log(error);
+	// }
 
 	printErrorEndingInfo(error.plugin, error.name);
 }
