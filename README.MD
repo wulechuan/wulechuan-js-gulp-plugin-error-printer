@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="./node_modules/@wulechuan/css-stylus-markdown-themes/dist/default.css">
+
+
 # NPM Package
 
 <dl>
@@ -8,7 +11,7 @@
 
 </dd>
 <dt>Author</dt>
-<dd>南昌吴乐川</dd>
+<dd><p>南昌吴乐川</p></dd>
 </dl>
 
 <br/>
@@ -63,12 +66,18 @@ const basePathToShortenPrintedFilePaths = exampleSourceFileBasePath;
 gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
 	const taskSteps = [];
 
-	taskSteps.push(gulp.src(joinPath(exampleSourceFileBasePath, 'css-stylus/source.styl')));
+	taskSteps.push(gulp.src(
+		joinPath(exampleSourceFileBasePath, 'css-stylus/source.styl')
+	));
+
 	taskSteps.push(compileStylus());
 
 	pump(taskSteps, (theError) => {
 		if (theError) {
-			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(
+				theError,
+				basePathToShortenPrintedFilePaths
+			);
 		}
 
 		thisTaskIsDone();
