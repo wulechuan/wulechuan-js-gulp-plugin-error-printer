@@ -86,7 +86,7 @@ gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
 ```
 
 
-## Try it out, See it in Action
+## Try It out, See It in Action
 
 There is a dummy project included within this repository,
 so that people can try this logger without difficulty.
