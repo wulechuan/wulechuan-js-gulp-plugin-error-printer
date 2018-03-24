@@ -35,7 +35,16 @@ const {
 	example: exampleSourceFileBasePath,
 } = packageJSON.directories;
 
-const basePathToShortenPrintedFilePaths = exampleSourceFileBasePath;
+
+const errorPrintingConfigurations = {
+	basePathToShortenPrintedFilePaths: exampleSourceFileBasePath,
+
+	colorTheme: {
+		heading: {
+			lineColor: 'magenta',
+		},
+	},
+};
 
 
 // --------------- globs ---------------
@@ -78,7 +87,7 @@ gulp.task('build: css: stylus (1)', () => {
 	return gulp.src(sourceGlobsCSSStylusEntries)
 		.pipe(compileStylus())
 		.on('error', theError => {
-			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, errorPrintingConfigurations);
 		});
 });
 
@@ -86,7 +95,7 @@ gulp.task('build: js: uglify (1)', () => {
 	return gulp.src(sourceGlobsJavascriptBuildingEntries)
 		.pipe(uglifyJavascript())
 		.on('error', theError => {
-			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, errorPrintingConfigurations);
 		});
 });
 
@@ -101,7 +110,7 @@ gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
 
 	pump(taskSteps, (theError) => {
 		if (theError) {
-			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, errorPrintingConfigurations);
 		}
 
 		thisTaskIsDone();
@@ -116,7 +125,7 @@ gulp.task('build: css: LESS (2)', (thisTaskIsDone) => {
 
 	pump(taskSteps, (theError) => {
 		if (theError) {
-			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, errorPrintingConfigurations);
 		}
 
 		thisTaskIsDone();
@@ -131,7 +140,7 @@ gulp.task('build: css: sass (2)', (thisTaskIsDone) => {
 
 	pump(taskSteps, (theError) => {
 		if (theError) {
-			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, errorPrintingConfigurations);
 		}
 
 		thisTaskIsDone();
@@ -146,7 +155,7 @@ gulp.task('build: js: uglify (2)', (thisTaskIsDone) => {
 
 	pump(taskSteps, (theError) => {
 		if (theError) {
-			printGulpPluginErrorBeautifully(theError, basePathToShortenPrintedFilePaths);
+			printGulpPluginErrorBeautifully(theError, errorPrintingConfigurations);
 		}
 
 		thisTaskIsDone();

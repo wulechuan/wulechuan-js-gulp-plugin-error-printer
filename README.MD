@@ -14,10 +14,6 @@
 <dd><p>南昌吴乐川</p></dd>
 </dl>
 
-<br/>
-<br/>
-<br/>
-<br/>
 
 # Introduction
 
@@ -26,8 +22,8 @@ It parses gulp's [PluginError](https://github.com/gulpjs/plugin-error) instance,
 and is expected to print a more beautiful log for the error instance,
 as long as a parser is provided for that specific type of PluginError.
 
-<br/>
-<br/>
+Almost all colors in the logs are configurable.
+
 
 ## Supported Plugins So Far
 
@@ -39,10 +35,6 @@ as long as a parser is provided for that specific type of PluginError.
 For those not supported errors,
 a beautify property detail list is logged for each.
 
-<br/>
-<br/>
-<br/>
-<br/>
 
 # Usage
 
@@ -57,10 +49,17 @@ const printGulpPluginErrorBeautifully = require('.');
 
 const exampleSourceFileBasePath = './examples';
 
+const errorPrintingConfigurations = {
+	// This simply helps the logger print shorter paths
+	// so that file paths looks better in narrow console windows.
+	basePathToShortenPrintedFilePaths: exampleSourceFileBasePath,
 
-// This simply helps the logger print shorter paths
-// so that file paths looks better in narrow console windows.
-const basePathToShortenPrintedFilePaths = exampleSourceFileBasePath;
+	colorTheme: {
+		heading: {
+			lineColor: 'magenta',
+		},
+	},
+};
 
 
 gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
@@ -76,7 +75,7 @@ gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
 		if (theError) {
 			printGulpPluginErrorBeautifully(
 				theError,
-				basePathToShortenPrintedFilePaths
+				errorPrintingConfigurations
 			);
 		}
 
@@ -85,10 +84,9 @@ gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
 });
 
 ```
-<br/>
-<br/>
 
-## Try It Out, See It in Action
+
+## Try it out, See it in Action
 
 There is a dummy project included within this repository,
 so that people can try this logger without difficulty.
@@ -132,7 +130,6 @@ gulp
 
 That's it.
 
-<br/>
 
 ### Some Snapshots of Mine
 
@@ -155,8 +152,6 @@ A Sass compilation error.
 An UglifyJS parsing error.
 ![An UglifyJS parsing error](./docs/illustrates/example-an-printed-error-of-gulp-uglify.png "An UglifyJS parsing error")
 
-<br/>
-<br/>
 
 ## Configurations
 
@@ -165,10 +160,6 @@ So you may call if "color theme configurations" if you prefer.
 
 See [configurations.md](./docs/configurations.md).
 
-<br/>
-<br/>
-<br/>
-<br/>
 
 # Known Issues
 
@@ -179,10 +170,6 @@ Since this logger also prints the error, the error is printed **twice**.
 
 I'll learn how to *swallow* the error inside this logger in the future.
 
-<br/>
-<br/>
-<br/>
-<br/>
 
 # API
 

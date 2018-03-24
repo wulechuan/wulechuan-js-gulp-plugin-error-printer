@@ -2,6 +2,7 @@
 // see also: https://github.com/gulpjs/plugin-error/blob/master/index.d.ts
 
 const pathTool = require('path');
+const deepMerge = require('deepmerge');
 
 const chalk = require('chalk');
 
@@ -10,28 +11,42 @@ const shortLineWidth = 24;
 let headingAndEndingLinesWidth = longLineWidth;
 
 const defaultConfigurations = require('./configurations');
-const configurations = {
-	...defaultConfigurations,
-};
-
-const { colorTheme } = configurations;
 
 
 const printJavascriptObject = require('./utils/print-javascript-object'); // eslint-disable-line no-unused-vars
 
 
-module.exports = function printGulpPluginErrorBeautifully(error, basePathToShortenPrintedFilePaths) {
+module.exports = function printGulpPluginErrorBeautifully(error, userConfigurations) {
+	if (typeof userConfigurations === 'string') {
+		userConfigurations = {
+			basePathToShortenPrintedFilePaths: userConfigurations,
+		};
+	}
+
+	let configurations = deepMerge(
+		{
+			basePathToShortenPrintedFilePaths: process.cwd(),
+		},
+
+		defaultConfigurations
+	);
+
+	configurations = deepMerge(
+		configurations,
+		userConfigurations
+	);
+
 	const errorParser = choosePluginErrorParseAccordingToInvolvedPluginName(error.plugin);
 	if (typeof errorParser === 'function') {
 
 		const parsedStructure = errorParser(error);
 		if (parsedStructure) {
-			printErrorTheComplexWay(error.plugin, parsedStructure, basePathToShortenPrintedFilePaths);
+			printErrorTheComplexWay(error.plugin, parsedStructure, configurations);
 			return;
 		}
 	}
 
-	printErrorTheSimpleWay(error);
+	printErrorTheSimpleWay(error, configurations);
 };
 
 
@@ -66,31 +81,31 @@ function printShortLine() {
 	printLine(shortLineWidth);
 }
 
-function printErrorAbstractInfo(involvedPluginName, errorTypeString) {
+function printErrorAbstractInfo(involvedPluginName, errorTypeString, colorTheme) {
 	headingAndEndingLinesWidth = 'HH:mm:ss '.length + involvedPluginName.length + 2 + errorTypeString.length + 2;
 
 	console.log('\n'.repeat(2));
 	printLine(headingAndEndingLinesWidth, colorTheme.heading.lineColor);
 
 	console.log(`${
-		shadingString(
+		shadeString(
 			formatTimestamp(Date.now()),
 			colorTheme.timestampTextColor
 		)
 	} ${
-		shadingString(
+		shadeString(
 			` ${involvedPluginName} `,
 			colorTheme.heading.invlovedPluginNameTextColor,
 			colorTheme.heading.invlovedPluginNameBgndColor
 		)
 	}${
-		shadingString(
+		shadeString(
 			` ${errorTypeString} `,
 			colorTheme.heading.errorTypeInfoTextColor,
 			colorTheme.heading.errorTypeInfoBgndColor
 		)
 	} ${
-		shadingString(
+		shadeString(
 			'╳',
 			colorTheme.lineTailSymbolTextColor
 		)
@@ -99,22 +114,22 @@ function printErrorAbstractInfo(involvedPluginName, errorTypeString) {
 	printLine(headingAndEndingLinesWidth, colorTheme.heading.lineColor);
 }
 
-function printErrorEndingInfo(involvedPluginName, errorTypeString) {
+function printErrorEndingInfo(involvedPluginName, errorTypeString, colorTheme) {
 	printLine(headingAndEndingLinesWidth, colorTheme.ending.lineColor);
 
 	console.log(`${
-		shadingString(
+		shadeString(
 			'  End of ',
 			colorTheme.ending.normalTextColor
 		)
 	}${
-		shadingString(
+		shadeString(
 			` ${involvedPluginName} `,
 			colorTheme.ending.invlovedPluginNameTextColor,
 			colorTheme.ending.invlovedPluginNameBgndColor
 		)
 	}${
-		shadingString(
+		shadeString(
 			` ${errorTypeString} `,
 			colorTheme.ending.errorTypeInfoTextColor,
 			colorTheme.ending.errorTypeInfoBgndColor
@@ -126,21 +141,21 @@ function printErrorEndingInfo(involvedPluginName, errorTypeString) {
 	console.log('\n'.repeat(2));
 }
 
-function printConclusionMessageIfAny(errorMessage) {
+function printConclusionMessageIfAny(errorMessage, colorTheme) {
 	if (errorMessage) {
 		console.log(`${
-			shadingString(
+			shadeString(
 				' Error Message ',
 				colorTheme.conclusionMessage.labelTextColor,
 				colorTheme.conclusionMessage.labelBgndColor
 			)
 		} ${
-			shadingString(
+			shadeString(
 				':',
 				colorTheme.lineTailSymbolTextColor
 			)
 		}\n\n${
-			shadingString(
+			shadeString(
 				errorMessage,
 				colorTheme.conclusionMessage.messageTextColor,
 				colorTheme.conclusionMessage.messageBgndColor
@@ -149,13 +164,14 @@ function printConclusionMessageIfAny(errorMessage) {
 	}
 }
 
-function printHeaderForOneItemInStack(fileFullPath, lineNumber, columnNumber, basePathToShortenPrintedFilePaths) {
+function printHeaderForOneItemInStack(fileFullPath, lineNumber, columnNumber, configurations) {
+	const {
+		colorTheme,
+		basePathToShortenPrintedFilePaths,
+	} = configurations;
+
 	if (! fileFullPath || typeof fileFullPath !== 'string') {
 		return;
-	}
-
-	if (typeof basePathToShortenPrintedFilePaths !== 'string') {
-		basePathToShortenPrintedFilePaths = '';
 	}
 
 	if (! lineNumber && lineNumber !== 0) {
@@ -174,7 +190,7 @@ function printHeaderForOneItemInStack(fileFullPath, lineNumber, columnNumber, ba
 	// the file path must be short enough, or the console being wide enough,
 	// so that the file path displays with a single line, can the said file path be clicked.
 	console.log(`Clickable linkage:\n${
-		shadingString(
+		shadeString(
 			fileFullPath,
 			colorTheme.fileInfo.clickableLinkageTextColor
 		)
@@ -194,32 +210,32 @@ function printHeaderForOneItemInStack(fileFullPath, lineNumber, columnNumber, ba
 	leafFolderParentPath = `${leafFolderParentPath}${pathTool.sep}`;
 
 	console.log(`File Path: ${
-		shadingString(
+		shadeString(
 			leafFolderParentPath,
 			colorTheme.fileInfo.pathNormalTextColor
 		)
 	}${
-		shadingString(
+		shadeString(
 			leafFolder,
 			colorTheme.fileInfo.pathLeafFolderTextColor
 		)
 	}${
-		shadingString(
+		shadeString(
 			pathTool.sep,
 			colorTheme.fileInfo.pathNormalTextColor
 		)
 	}\nFile Name: ${
-		shadingString(
+		shadeString(
 			fileBaseName,
 			colorTheme.fileInfo.fileNameTextColor
 		)
 	}\nLine: ${
-		shadingString(
+		shadeString(
 			lineNumber,
 			colorTheme.fileInfo.lineNumberTextColor
 		)
 	}, Column: ${
-		shadingString(
+		shadeString(
 			columnNumber,
 			colorTheme.fileInfo.columnNumberTextColor
 		)
@@ -228,7 +244,7 @@ function printHeaderForOneItemInStack(fileFullPath, lineNumber, columnNumber, ba
 	printShortLine();
 }
 
-function printInvolvedSnippetLinesInAnArray(snippetLines, keyLineIndexInTheArray, errorColumnNumber, shouldPrependLineNumbers, errorLineNumber) {
+function printInvolvedSnippetLinesInAnArray(colorTheme, snippetLines, keyLineIndexInTheArray, errorColumnNumber, shouldPrependLineNumbers, errorLineNumber) {
 	const gutterLeadingSpacesCountIfGutterIsEnabled = 2;
 	const gutterLeadingSpacesIfGutterIsEnabled = ' '.repeat(gutterLeadingSpacesCountIfGutterIsEnabled);
 
@@ -275,7 +291,7 @@ function printInvolvedSnippetLinesInAnArray(snippetLines, keyLineIndexInTheArray
 			}
 
 
-			console.log(shadingString(
+			console.log(shadeString(
 				`${gutterString}${line}`,
 				colorTheme.involvedSnippet.keyLineTextColor
 			));
@@ -285,20 +301,20 @@ function printInvolvedSnippetLinesInAnArray(snippetLines, keyLineIndexInTheArray
 			}${
 				leadingSpaces
 			}${
-				shadingString(
+				shadeString(
 					'~'.repeat(errorDecorationLineLength),
 					colorTheme.involvedSnippet.keyLineDecorationLineColor
 				)
 			}${
 				shouldPrintAnXAtWaveLineTail
-					? shadingString(
+					? shadeString(
 						'╳',
 						colorTheme.involvedSnippet.keyLineDecorationLineColor
 					)
 					: ''
 			}`);
 		} else {
-			console.log(shadingString(
+			console.log(shadeString(
 				`${gutterString}${line}`,
 				colorTheme.involvedSnippet.normalTextColor
 			));
@@ -310,7 +326,7 @@ function printInvolvedSnippetLinesInAnArray(snippetLines, keyLineIndexInTheArray
 	}
 }
 
-function parseAndPrintDetailOfTopMostStackTheDefaultWay(involvedSnippetPlusRawErrorMessage) {
+function parseAndPrintDetailOfTopMostStackTheDefaultWay(involvedSnippetPlusRawErrorMessage, colorTheme) {
 	if (! involvedSnippetPlusRawErrorMessage || typeof involvedSnippetPlusRawErrorMessage !== 'string') {
 		return;
 	}
@@ -341,52 +357,57 @@ function parseAndPrintDetailOfTopMostStackTheDefaultWay(involvedSnippetPlusRawEr
 	);
 
 	console.log(`${
-		shadingString(
+		shadeString(
 			snippetPart1,
 			colorTheme.involvedSnippet.normalTextColor
 		)
 	}${
-		shadingString(
+		shadeString(
 			highlightedLine,
 			colorTheme.involvedSnippet.keyLineTextColor
 		)
 	}\n${
 		' '.repeat(gutterWidth)
 	}${
-		shadingString(
+		shadeString(
 			'~'.repeat(errorDecorationLine.length - gutterWidth - '\n'.length - '^'.length),
 			colorTheme.involvedSnippet.keyLineDecorationLineColor
 		)
 	}${
-		shadingString(
+		shadeString(
 			'╳', // ▲
 			colorTheme.involvedSnippet.keyLineDecorationLineColor
 		)
 	}${
-		shadingString(
+		shadeString(
 			snippetPart2,
 			colorTheme.involvedSnippet.normalTextColor
 		)
 	}`);
 
-	printConclusionMessageIfAny(rawErrorMessageOfTopMostStack);
+	printConclusionMessageIfAny(rawErrorMessageOfTopMostStack, colorTheme);
 }
 
 
-function printAllDeeperStackRecords(stacks, basePathToShortenPrintedFilePaths) {
+function printAllDeeperStackRecords(stacks, configurations) {
 	if (! Array.isArray(stacks)) {
 		return;
 	}
 
+	const {
+		colorTheme,
+		// basePathToShortenPrintedFilePaths,
+	} = configurations;
+
 	if (stacks.length > 0) {
 		console.log(`\n${
-			shadingString(
+			shadeString(
 				' ...more info in deeper stack ',
 				colorTheme.stackSectionLabel.textColor,
 				colorTheme.stackSectionLabel.bgndColor
 			)
 		} ${
-			shadingString(
+			shadeString(
 				'>',
 				colorTheme.lineTailSymbolTextColor
 			)
@@ -425,11 +446,11 @@ function printAllDeeperStackRecords(stacks, basePathToShortenPrintedFilePaths) {
 
 
 		if (stackFilePath && stackFileLine && stackFileColumn) {
-			printHeaderForOneItemInStack(stackFilePath, stackFileLine, stackFileColumn, basePathToShortenPrintedFilePaths);
+			printHeaderForOneItemInStack(stackFilePath, stackFileLine, stackFileColumn, configurations);
 		}
 
 		console.log(`${
-			shadingString(
+			shadeString(
 				stackDetail,
 				colorTheme.callingStacks.stackDetailTextColor
 			)
@@ -441,8 +462,13 @@ function printAllDeeperStackRecords(stacks, basePathToShortenPrintedFilePaths) {
 
 
 
-function printErrorTheSimpleWay(error) {
-	printErrorAbstractInfo(error.plugin, error.name);
+function printErrorTheSimpleWay(error, configurations) {
+	const {
+		colorTheme,
+		// basePathToShortenPrintedFilePaths,
+	} = configurations;
+
+	printErrorAbstractInfo(error.plugin, error.name, colorTheme);
 
 	const errorToPrint = { ...error };
 	errorToPrint.__proto__ = {
@@ -459,23 +485,28 @@ function printErrorTheSimpleWay(error) {
 	// 	console.log(error);
 	// }
 
-	printErrorEndingInfo(error.plugin, error.name);
+	printErrorEndingInfo(error.plugin, error.name, colorTheme);
 }
 
-function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, basePathToShortenPrintedFilePaths) {
-	printErrorAbstractInfo(involvedGulpPluginName, parsedStructure.errorType);
+function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, configurations) {
+	const {
+		colorTheme,
+		// basePathToShortenPrintedFilePaths,
+	} = configurations;
+
+	printErrorAbstractInfo(involvedGulpPluginName, parsedStructure.errorType, colorTheme);
 
 	const { stackTopItem } = parsedStructure;
 
 	if (stackTopItem && typeof stackTopItem === 'object') {
 		console.log(`${
-			shadingString(
+			shadeString(
 				' Statement in top most stack ',
 				colorTheme.stackSectionLabel.textColor,
 				colorTheme.stackSectionLabel.bgndColor
 			)
 		} ${
-			shadingString(
+			shadeString(
 				'>',
 				colorTheme.lineTailSymbolTextColor
 			)
@@ -485,11 +516,12 @@ function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, basePa
 			stackTopItem.path,
 			stackTopItem.lineNumber,
 			stackTopItem.columnNumber,
-			basePathToShortenPrintedFilePaths
+			configurations
 		);
 
 		if (Array.isArray(stackTopItem.involvedSnippet)) {
 			printInvolvedSnippetLinesInAnArray(
+				colorTheme,
 				stackTopItem.involvedSnippet,
 				stackTopItem.involvedSnippetKeyLineIndexInTheArray,
 				stackTopItem.columnNumber,
@@ -499,11 +531,11 @@ function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, basePa
 		} else {
 			// For some plugins, the conclusion message might contain inside snippets.
 			// In this case, the line below will print the included conclusion message.
-			parseAndPrintDetailOfTopMostStackTheDefaultWay(stackTopItem.involvedSnippet);
+			parseAndPrintDetailOfTopMostStackTheDefaultWay(stackTopItem.involvedSnippet, colorTheme);
 		}
 
 		// For some other plugins, the conclusion message is provided separately.
-		printConclusionMessageIfAny(stackTopItem.conclusionMessage);
+		printConclusionMessageIfAny(stackTopItem.conclusionMessage, colorTheme);
 	}
 
 	let { deeperStacks } = parsedStructure;
@@ -512,10 +544,10 @@ function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, basePa
 			deeperStacks = parseStacksStringIntoStacksArrayTheDefaultWay(deeperStacks);
 		}
 
-		printAllDeeperStackRecords(deeperStacks, basePathToShortenPrintedFilePaths);
+		printAllDeeperStackRecords(deeperStacks, configurations);
 	}
 
-	printErrorEndingInfo(involvedGulpPluginName, parsedStructure.errorType);
+	printErrorEndingInfo(involvedGulpPluginName, parsedStructure.errorType, colorTheme);
 }
 
 function formatTimestamp(timestamp) {
@@ -532,7 +564,7 @@ function formatTimestamp(timestamp) {
 	].join(':');
 }
 
-function shadingString(rawString, textColor, bgndColor) {
+function shadeString(rawString, textColor, bgndColor) {
 	const textColorIsValid = !!textColor;
 	const bgndColorIsValid = !!bgndColor && bgndColor !== 'gray';
 

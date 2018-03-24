@@ -1,22 +1,35 @@
+<link rel="stylesheet" href="../node_modules/@wulechuan/css-stylus-markdown-themes/dist/default.css">
+
+
+
 # Configurations of `@wulechuan/javascript-gulp-plugin-error-printer`
 
 Currently only colors are configurable.
 So you may call if "color theme configurations" if you prefer.
 
-<br/>
-<br/>
 
 ## Customization
 
-Customization is **not** supported at present.
-So if you'd like to customize printing colors,
-you have to edit the source file:
-```sh
-<this repository root folder>/source/configurations.js
+Customization is as simple as passing an object to the printer,
+like so:
+```javascript
+/* Setup your colors here */
+const errorPrintingConfigurations = {
+	colorTheme: {
+		heading: {
+			lineColor: 'magenta',
+		},
+	},
+};
+
+
+/* Then inside a task, print the error like this: */
+printGulpPluginErrorBeautifully(
+	theError,
+	errorPrintingConfigurations
+);
 ```
 
-<br/>
-<br/>
 
 ## All Default Colors
 
@@ -92,10 +105,6 @@ module.exports = {
 };
 ```
 
-<br/>
-<br/>
-<br/>
-<br/>
 
 # Appendix
 
