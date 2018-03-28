@@ -470,7 +470,7 @@ function printErrorTheSimpleWay(error, configurations) {
 
 	printErrorAbstractInfo(error.plugin, error.name, colorTheme);
 
-	const errorToPrint = { ...error };
+	const errorToPrint = Object.assign({}, error );
 	errorToPrint.__proto__ = {
 		constructor: error.constructor,
 	};
