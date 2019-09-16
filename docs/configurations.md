@@ -1,32 +1,37 @@
-<link rel="stylesheet" href="../node_modules/@wulechuan/css-stylus-markdown-themes/dist/default.css">
-
-
-
 # Configurations of `@wulechuan/javascript-gulp-plugin-error-printer`
 
-Currently only colors are configurable.
-So you may call if "color theme configurations" if you prefer.
+
+## Documents Navigation
+
+Back to [README.MD](../README.MD).
+
+
+
+## Introduction
+
+Currently only colors are configurable. So you may call it "color theme configurations" if you prefer.
 
 
 ## Customization
 
 Customization is as simple as passing an object to the printer,
 like so:
+
 ```javascript
 /* Setup your colors here */
 const errorPrintingConfigurations = {
-	colorTheme: {
-		heading: {
-			lineColor: 'magenta',
-		},
-	},
+    colorTheme: {
+        heading: {
+            lineColor: 'magenta',
+        },
+    },
 };
 
 
 /* Then inside a task, print the error like this: */
 printGulpPluginErrorBeautifully(
-	theError,
-	errorPrintingConfigurations
+    theError,
+    errorPrintingConfigurations
 );
 ```
 
@@ -50,62 +55,58 @@ const COLOR_ANSI_MAGENTA = 'magenta';
 /* eslint-enable no-unused-vars */
 
 module.exports = {
-	colorTheme: {
-		timestampTextColor:      COLOR_ANSI_GRAY,
-		lineTailSymbolTextColor: COLOR_ANSI_GRAY,
+    colorTheme: {
+        timestampTextColor:      COLOR_ANSI_GRAY,
+        lineTailSymbolTextColor: COLOR_ANSI_GRAY,
 
-		heading: {
-			lineColor:                   COLOR_ANSI_RED,
-			invlovedPluginNameTextColor: COLOR_ANSI_BLACK,
-			invlovedPluginNameBgndColor: COLOR_ANSI_WHITE,
-			errorTypeInfoTextColor:      COLOR_ANSI_BLACK,
-			errorTypeInfoBgndColor:      COLOR_ANSI_MAGENTA,
-		},
+        heading: {
+            lineColor:                   COLOR_ANSI_RED,
+            invlovedPluginNameTextColor: COLOR_ANSI_BLACK,
+            invlovedPluginNameBgndColor: COLOR_ANSI_WHITE,
+            errorTypeInfoTextColor:      COLOR_ANSI_BLACK,
+            errorTypeInfoBgndColor:      COLOR_ANSI_MAGENTA,
+        },
 
-		ending: {
-			lineColor:                   COLOR_ANSI_RED,
-			normalTextColor:             COLOR_ANSI_RED,
-			invlovedPluginNameTextColor: COLOR_ANSI_WHITE,
-			invlovedPluginNameBgndColor: null,
-			errorTypeInfoTextColor:      COLOR_ANSI_RED,
-			errorTypeInfoBgndColor:      null,
-		},
+        ending: {
+            lineColor:                   COLOR_ANSI_RED,
+            normalTextColor:             COLOR_ANSI_RED,
+            invlovedPluginNameTextColor: COLOR_ANSI_WHITE,
+            invlovedPluginNameBgndColor: null,
+            errorTypeInfoTextColor:      COLOR_ANSI_RED,
+            errorTypeInfoBgndColor:      null,
+        },
 
-		stackSectionLabel: {
-			textColor: COLOR_ANSI_BLACK,
-			bgndColor: COLOR_ANSI_BLUE,
-		},
+        stackSectionLabel: {
+            textColor: COLOR_ANSI_BLACK,
+            bgndColor: COLOR_ANSI_BLUE,
+        },
 
-		conclusionMessage: {
-			labelTextColor:   COLOR_ANSI_BLACK,
-			labelBgndColor:   COLOR_ANSI_YELLOW,
-			messageTextColor: COLOR_ANSI_YELLOW,
-			messageBgndColor: null,
-		},
+        conclusionMessage: {
+            labelTextColor:   COLOR_ANSI_BLACK,
+            labelBgndColor:   COLOR_ANSI_YELLOW,
+            messageTextColor: COLOR_ANSI_YELLOW,
+            messageBgndColor: null,
+        },
 
-		fileInfo: {
-			clickableLinkageTextColor: COLOR_ANSI_GRAY,
-			pathNormalTextColor:       COLOR_ANSI_GRAY,
-			pathLeafFolderTextColor:   COLOR_ANSI_BLUE,
-			fileNameTextColor:         COLOR_ANSI_MAGENTA,
-			lineNumberTextColor:       COLOR_ANSI_GREEN,
-			columnNumberTextColor:     COLOR_ANSI_GREEN,
-		},
+        fileInfo: {
+            clickableLinkageTextColor: COLOR_ANSI_GRAY,
+            pathNormalTextColor:       COLOR_ANSI_GRAY,
+            pathLeafFolderTextColor:   COLOR_ANSI_BLUE,
+            fileNameTextColor:         COLOR_ANSI_MAGENTA,
+            lineNumberTextColor:       COLOR_ANSI_GREEN,
+            columnNumberTextColor:     COLOR_ANSI_GREEN,
+        },
 
-		involvedSnippet: {
-			normalTextColor:            null,
-			keyLineTextColor:           COLOR_ANSI_GREEN,
-			keyLineDecorationLineColor: COLOR_ANSI_RED,
-		},
+        involvedSnippet: {
+            normalTextColor:            null,
+            keyLineTextColor:           COLOR_ANSI_GREEN,
+            keyLineDecorationLineColor: COLOR_ANSI_RED,
+        },
 
-		callingStacks: {
-			stackDetailTextColor: COLOR_ANSI_GREEN,
-		},
-	},
+        callingStacks: {
+            stackDetailTextColor: COLOR_ANSI_GREEN,
+        },
+    },
 };
 ```
 
-
-# Appendix
-
-See also the [README.MD](../README.MD).

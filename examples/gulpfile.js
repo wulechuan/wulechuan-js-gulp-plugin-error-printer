@@ -1,6 +1,6 @@
-const pathTool = require('path');
+const path = require('path');
 
-const { join: joinPath } = pathTool;
+const joinPathPOSIX = path.posix.join;
 
 const gulp = require('gulp');
 const pump = require('pump');
@@ -11,7 +11,7 @@ const compileSass = require('gulp-sass');
 const uglifyJavascript = require('gulp-uglify');
 
 
-const printGulpPluginErrorBeautifully = require('.');
+const printGulpPluginErrorBeautifully = require('..');
 
 /*
 *
@@ -28,8 +28,7 @@ const printGulpPluginErrorBeautifully = require('.');
 
 // --------------- 基本常量 (Basic) ---------------
 
-const npmProjectRootPath = process.cwd();
-const packageJSON = require(joinPath(npmProjectRootPath, 'package.json')); // eslint-disable-line import/no-dynamic-require
+const packageJSON = require('../package.json');
 
 const {
 	example: exampleSourceFileBasePath,
@@ -50,19 +49,19 @@ const errorPrintingConfigurations = {
 // --------------- globs ---------------
 
 const sourceGlobsCSSStylusEntries = [
-	joinPath(exampleSourceFileBasePath, 'css-stylus/source.styl'),
+	joinPathPOSIX(exampleSourceFileBasePath, 'css-stylus/source.styl'),
 ];
 
 const sourceGlobsCSSLESSEntries = [
-	joinPath(exampleSourceFileBasePath, 'css-less/wulechuan.less'),
+	joinPathPOSIX(exampleSourceFileBasePath, 'css-less/wulechuan.less'),
 ];
 
 const sourceGlobsCSSSassEntries = [
-	joinPath(exampleSourceFileBasePath, 'css-sass/wulechuan.scss'),
+	joinPathPOSIX(exampleSourceFileBasePath, 'css-sass/wulechuan.scss'),
 ];
 
 const sourceGlobsJavascriptBuildingEntries = [
-	joinPath(exampleSourceFileBasePath, 'js-uglify/wulechuan.js'),
+	joinPathPOSIX(exampleSourceFileBasePath, 'js-uglify/wulechuan.js'),
 ];
 
 /*
