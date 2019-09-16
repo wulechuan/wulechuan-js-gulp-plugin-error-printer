@@ -1,6 +1,6 @@
 {
   "name": "@wulechuan/javascript-gulp-plugin-error-printer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Parse and print gulp {PluginError} beautifully.",
   "author": "wulechuan <wulechuan@live.com>",
   "license": "WTFPL",
@@ -19,29 +19,29 @@
   "directories": {
     "example": "examples"
   },
-  "homepage": "https://github.com/wulechuan/javascript-wulechuan-gulp-plugin-error-printer#readme",
+  "homepage": "https://github.com/wulechuan/wulechuan-js-gulp-plugin-error-printer#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wulechuan/javascript-wulechuan-gulp-plugin-error-printer.git"
+    "url": "git+https://github.com/wulechuan/wulechuan-js-gulp-plugin-error-printer.git"
   },
   "bugs": {
-    "url": "https://github.com/wulechuan/javascript-wulechuan-gulp-plugin-error-printer/issues"
+    "url": "https://github.com/wulechuan/wulechuan-js-gulp-plugin-error-printer/issues"
   },
   "scripts": {
     "start": "gulp"
   },
   "dependencies": {
-    "chalk": "^2.3.2",
-    "deepmerge": "^2.1.0"
+    "chalk": "^2.4.2",
+    "deepmerge": "^2.2.1"
   },
   "devDependencies": {
     "@wulechuan/css-stylus-markdown-themes": "^1.0.12",
     "eslint": "^4.19.1",
     "gulp": "^3.9.1",
-    "gulp-less": "^4.0.0",
+    "gulp-less": "^4.0.1",
     "gulp-sass": "^3.2.1",
     "gulp-stylus": "^2.7.0",
-    "gulp-uglify": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
     "path": "^0.12.7",
     "pump": "^3.0.0"
   }
