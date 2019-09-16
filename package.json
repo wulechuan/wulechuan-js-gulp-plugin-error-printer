@@ -33,12 +33,12 @@
     "gulp-stylus": "^2.7.0",
     "gulp-uglify": "^3.0.2"
   },
-  "homepage": "https://github.com/wulechuan/wulechuan-js-gulp-plugin-error-printer#readme",
+  "homepage": "https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wulechuan/wulechuan-js-gulp-plugin-error-printer.git"
+    "url": "git+https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins.git"
   },
   "bugs": {
-    "url": "https://github.com/wulechuan/wulechuan-js-gulp-plugin-error-printer/issues"
+    "url": "https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins/issues"
   }
 }
