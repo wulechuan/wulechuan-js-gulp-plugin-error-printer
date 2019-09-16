@@ -27,7 +27,6 @@
     "deepmerge": "^2.2.1"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
     "gulp": "^4.0.2",
     "gulp-less": "^4.0.1",
     "gulp-stylus": "^2.7.0",
