@@ -31,24 +31,25 @@ Almost all colors in the logs are configurable.
 * [gulp-less](https://www.npmjs.com/package/gulp-less)
 * [gulp-sass](https://www.npmjs.com/package/gulp-sass)
 
-For those not supported errors,
-a beautify property detail list is logged for each.
+Even for those errors that are not supported,
+a beautified property list is logged.
 
 
 ## Usage
 
 ### An Example
 
-See the `gulpfile.js` included by this repository as an example.
+See the `examples/gulpfile.js` included by this repository as an example.
 
 Below are the key snippet from the said `gulpfile.js`.
 
 ```javascript
-const printGulpPluginErrorBeautifully = require('.');
+const printGulpPluginErrorBeautifully = require('..');
 
-const exampleSourceFileBasePath = './examples';
+const exampleSourceFileBasePath = '.';
 
-const errorPrintingConfigurations = {
+const errorOfGlupPluginsPrintingConfigurations = {
+
     // This simply helps the logger print shorter paths
     // so that file paths looks better in narrow console windows.
     basePathToShortenPrintedFilePaths: exampleSourceFileBasePath,
@@ -61,27 +62,14 @@ const errorPrintingConfigurations = {
 };
 
 
-gulp.task('build: css: stylus (2)', (thisTaskIsDone) => {
-    const taskSteps = [];
-
-    taskSteps.push(gulp.src(
-        joinPath(exampleSourceFileBasePath, 'css-stylus/source.styl')
-    ));
-
-    taskSteps.push(compileStylus());
-
-    pump(taskSteps, (theError) => {
-        if (theError) {
-            printGulpPluginErrorBeautifully(
-                theError,
-                errorPrintingConfigurations
-            );
-        }
-
-        thisTaskIsDone();
-    });
-});
-
+function buildCSSStylus (cb) {
+    return gulpRead(sourceGlobsOfCSSStylus)
+        .pipe(compileStylus())
+        .on('error', theError => {
+            printGulpPluginErrorBeautifully(theError, errorOfGlupPluginsPrintingConfigurations);
+            cb();
+        });
+}
 ```
 
 
