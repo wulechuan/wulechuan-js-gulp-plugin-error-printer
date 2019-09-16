@@ -1,7 +1,6 @@
 .vscode
-.eslintrc*
-.eslintignore*
 docs
 examples
-gulpfile.js
+.eslintrc*
+.eslintignore*
 .markdownlint.json

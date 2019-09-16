@@ -1,9 +1,9 @@
 {
   "name": "@wulechuan/javascript-gulp-plugin-error-printer",
   "version": "1.0.3",
-  "description": "Parse and print gulp {PluginError} beautifully.",
   "author": "wulechuan <wulechuan@live.com>",
   "license": "WTFPL",
+  "description": "Parse and print gulp {PluginError} beautifully.",
   "keywords": [
     "gulp",
     "PluginError",
@@ -20,7 +20,7 @@
     "example": "examples"
   },
   "scripts": {
-    "start": "gulp --gulpfile ./examples/gulpfile.js --"
+    "start": "gulp    --gulpfile ./examples/gulpfile.js    --silent    --"
   },
   "dependencies": {
     "chalk": "^2.4.2",
@@ -28,13 +28,10 @@
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-less": "^4.0.1",
-    "gulp-sass": "^3.2.1",
     "gulp-stylus": "^2.7.0",
-    "gulp-uglify": "^3.0.2",
-    "path": "^0.12.7",
-    "pump": "^3.0.0"
+    "gulp-uglify": "^3.0.2"
   },
   "homepage": "https://github.com/wulechuan/wulechuan-js-gulp-plugin-error-printer#readme",
   "repository": {

@@ -1,6 +1,5 @@
 module.exports = {
     env: {
-        browser: true,
         es6: true,
         node: true,
     },
@@ -11,7 +10,7 @@ module.exports = {
             experimentalObjectRestSpread: true,
             jsx: true,
         },
-        sourceType: 'module',
+        sourceType: 'script',
     },
     plugins: [
         // 'react',
