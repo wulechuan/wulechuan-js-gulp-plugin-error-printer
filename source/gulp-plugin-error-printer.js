@@ -461,6 +461,49 @@ function printAllDeeperStackRecords(stacks, configurations) {
 
 
 
+function shortenStringValueIfItIsWayTooLong(hostObject, propertyName, maxStringLengthToPrint, shouldNotUseChalk) {
+	if (!hostObject || typeof hostObject !== 'object' || Array.isArray(hostObject)) {
+		return;
+	}
+
+	if (!(maxStringLengthToPrint >= 0)) {
+		maxStringLengthToPrint = 515;
+	}
+
+	if (typeof hostObject[propertyName] === 'string') {
+		const rawString = hostObject[propertyName];
+		const rawStringLength = rawString.length;
+
+		if (rawStringLength > maxStringLengthToPrint) {
+			if (maxStringLengthToPrint === 0) {
+				delete hostObject.source;
+			} else {
+
+				if (shouldNotUseChalk) {
+					hostObject.source =`${
+						rawString.slice(0, maxStringLengthToPrint)
+					}\nThe original "source" is way too long (${
+						rawStringLength
+					} chars).\nThus sliced down to [0, ${
+						maxStringLengthToPrint
+					}).`;
+				} else {
+					hostObject.source =`${
+						rawString.slice(0, maxStringLengthToPrint)
+					}\n${
+						chalk.yellow(`The original "source" is way too long (${
+							rawStringLength
+						} chars).\nThus sliced down to [0, ${
+							maxStringLengthToPrint
+						}).`)
+					}`;
+				}
+
+			}
+
+		}
+	}
+}
 
 function printErrorTheSimpleWay(error, configurations) {
 	const {
@@ -470,12 +513,46 @@ function printErrorTheSimpleWay(error, configurations) {
 
 	printErrorAbstractInfo(error.plugin, error.name, colorTheme);
 
-	const errorToPrint = Object.assign({}, error );
+	const errorToPrint = Object.assign({
+		plugin: error.plugin, // make sure "plugin" is the first property to enumerate.
+	}, error );
+
 	errorToPrint.__proto__ = {
 		constructor: error.constructor,
 	};
 
 	delete errorToPrint.__safety;
+
+	if (error.message) {
+		delete errorToPrint.source;
+	} else {
+		shortenStringValueIfItIsWayTooLong(errorToPrint, 'source');
+	}
+
+	delete errorToPrint.input;
+	// const errorInput = errorToPrint.input;
+	// if (errorInput && typeof errorInput === 'object') {
+	// 	shortenStringValueIfItIsWayTooLong(errorInput, 'source', -1, true);
+	// }
+
+	if (errorToPrint.file && errorToPrint.fileName === errorToPrint.file) {
+		delete errorToPrint.fileName;
+	}
+
+	if (errorToPrint.line && errorToPrint.lineNumber === errorToPrint.line) {
+		delete errorToPrint.lineNumber;
+	}
+
+	if (typeof errorToPrint.showProperties === 'boolean') {
+		delete errorToPrint.showProperties;
+	}
+
+	if (typeof errorToPrint.showStack === 'boolean') {
+		delete errorToPrint.showStack;
+	}
+
+
+	// -----------------------------------------
 
 	printJavascriptObject(errorToPrint);
 

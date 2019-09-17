@@ -3,8 +3,8 @@ module.exports = function parseGulpLESSPluginError(error) {
 		return null;
 	}
 
-	const shouldDebugErrorObject = false;
-	if (shouldDebugErrorObject) {
+	const shouldPrintErrorObjectForDebugging = false;
+	if (shouldPrintErrorObjectForDebugging) {
 		require('../utils/print-javascript-object')(error);
 		return;
 	}
