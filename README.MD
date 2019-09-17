@@ -1,4 +1,4 @@
-# Printer of Errors of Glup Plugins
+# Printer of Errors of Glup Plugins [PROJECT DEPRECATED]
 
 ## NPM Page
 
@@ -13,6 +13,14 @@
 <dd><p>南昌吴乐川</p></dd>
 </dl>
 
+
+## DEPRECATION
+
+This package has been **deprecated**. The reason is simply I renamed this project, as the old name "javascript-gulp-plugin-error-printer" is not so good. It should not contains the word "javascript".
+
+The renamed(new) package is [@wulechuan/printer-for-errors-of-gulp-plugins](https://www.npmjs.com/package/@wulechuan/printer-for-errors-of-gulp-plugins). At beginning it's alomst identical to this old one. But it will get supported longer, and will hopefully be very different from this one in the future.
+
+-----
 
 ## Introduction
 
