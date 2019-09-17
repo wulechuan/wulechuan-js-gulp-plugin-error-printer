@@ -5,20 +5,11 @@ module.exports = {
     },
     extends: 'eslint:recommended',
     parserOptions: {
-        ecmaVersion: 6,
+        ecmaVersion: 2018,
         ecmaFeatures: {
             experimentalObjectRestSpread: true,
-            jsx: true,
         },
         sourceType: 'script',
-    },
-    plugins: [
-        // 'react',
-    ],
-    globals: {
-        // React: true,
-        // ReactDOM: true,
-        // mountNode: true,
     },
     rules: {
         indent: [ 'error', 'tab', {
@@ -40,7 +31,6 @@ module.exports = {
         'yoda': [ 'error', 'never' ],
         'comma-dangle': [ 'error', 'always-multiline' ],
         'func-names': [ 0, 'as-needed'],
-        'no-plusplus': 0,
         'no-unused-vars': 'error',
         'no-return-assign': 'error',
         'no-new-func': 'error',
@@ -57,7 +47,7 @@ module.exports = {
                 AssignmentExpression: {
                     array: false,
                     object: false,
-                }
+                },
             },
             {
                 enforceForRenamedProperties: false,

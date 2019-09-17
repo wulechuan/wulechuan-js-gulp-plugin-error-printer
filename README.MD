@@ -30,6 +30,7 @@ Almost all colors in the logs are configurable.
 * [gulp-stylus](https://www.npmjs.com/package/gulp-stylus)
 * [gulp-less](https://www.npmjs.com/package/gulp-less)
 * [gulp-sass](https://www.npmjs.com/package/gulp-sass)
+* [gulp-postcss](https://www.npmjs.com/package/gulp-postcss)
 
 Even for those errors that are not supported,
 a beautified property list is logged.

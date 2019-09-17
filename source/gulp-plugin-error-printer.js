@@ -44,6 +44,7 @@ module.exports = function printGulpPluginErrorBeautifully(error, userConfigurati
 		const parsedStructure = errorParser(error);
 		if (parsedStructure) {
 			if (parsedStructure.shouldStillUseTheSimplePrinter) {
+				delete parsedStructure.shouldStillUseTheSimplePrinter;
 				errorToPrintTheSimplyWay = parsedStructure;
 			} else {
 				printErrorTheComplexWay(error.plugin, parsedStructure, configurations);
@@ -604,19 +605,29 @@ function printErrorTheComplexWay(involvedGulpPluginName, parsedStructure, config
 			configurations
 		);
 
-		if (Array.isArray(stackTopItem.involvedSnippet)) {
-			printInvolvedSnippetLinesInAnArray(
-				colorTheme,
-				stackTopItem.involvedSnippet,
-				stackTopItem.involvedSnippetKeyLineIndexInTheArray,
-				stackTopItem.columnNumber,
-				true,
-				stackTopItem.lineNumber
-			);
-		} else {
-			// For some plugins, the conclusion message might contain inside snippets.
-			// In this case, the line below will print the included conclusion message.
-			parseAndPrintDetailOfTopMostStackTheDefaultWay(stackTopItem.involvedSnippet, colorTheme);
+		if (stackTopItem.involvedSnippet) {
+			if (stackTopItem.shouldPrintInvolvedSnippetAsIs) {
+
+				console.log(stackTopItem.involvedSnippet);
+
+			} else if (Array.isArray(stackTopItem.involvedSnippet)) {
+
+				printInvolvedSnippetLinesInAnArray(
+					colorTheme,
+					stackTopItem.involvedSnippet,
+					stackTopItem.involvedSnippetKeyLineIndexInTheArray,
+					stackTopItem.columnNumber,
+					true,
+					stackTopItem.lineNumber
+				);
+
+			} else {
+
+				// For some plugins, the conclusion message might contain inside snippets.
+				// In this case, the line below will print the included conclusion message.
+				parseAndPrintDetailOfTopMostStackTheDefaultWay(stackTopItem.involvedSnippet, colorTheme);
+
+			}
 		}
 
 		// For some other plugins, the conclusion message is provided separately.

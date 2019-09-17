@@ -24,7 +24,10 @@ module.exports = function parseGulpUglifyJsPluginError(error) {
 	let involvedSnippet = null;
 	let conclusionMessage = null;
 
+	const shouldStillUseTheSimplePrinter = true;
+
 	if (postcssNode && typeof postcssNode === 'object') {
+
 		const { source } = postcssNode;
 
 		if (error.message) {
@@ -40,9 +43,56 @@ module.exports = function parseGulpUglifyJsPluginError(error) {
 				filePath = '<unclear>';
 			}
 
-			lineNumber = source.start.line;
-			columnNumber = source.start.column;
+			if (source.start && typeof source.start === 'object') {
+				lineNumber = source.start.line;
+				columnNumber = source.start.column;
+			}
 		}
+
+
+		if (shouldStillUseTheSimplePrinter) {
+			// We will use a modified error copy,
+			// and will return earlier here.
+
+			const {
+				plugin,
+				name,
+				fileName,
+				message,
+				stack,
+			} = error; // first these ones, in this order
+
+			let endLine;
+			let endColumn;
+
+			if (source.end && typeof source.end === 'object') {
+				endLine   = source.end.line;
+				endColumn = source.end.column;
+			}
+
+			const errorToPrint = {
+				shouldStillUseTheSimplePrinter: true,
+
+				plugin,
+				name,
+				file: filePath || fileName,
+				startLine: lineNumber,
+				startColumn: columnNumber,
+				endLine,
+				endColumn,
+				message,
+				stack,
+
+				...error, // then all of them. but enumerate order of some properties has decided above.
+			};
+
+			delete errorToPrint.input;
+			delete errorToPrint.postcssNode;
+
+			return errorToPrint;
+		}
+
+
 	} else {
 		filePath = error.file;
 		lineNumber = error.line;
@@ -70,6 +120,8 @@ module.exports = function parseGulpUglifyJsPluginError(error) {
 			involvedSnippet,
 			involvedSnippetKeyLineIndexInTheArray: NaN,
 			conclusionMessage,
+
+			shouldPrintInvolvedSnippetAsIs: true,
 		},
 
 		deeperStacks: stackUsefulPart,
