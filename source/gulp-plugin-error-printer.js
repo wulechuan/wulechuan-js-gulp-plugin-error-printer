@@ -36,17 +36,23 @@ module.exports = function printGulpPluginErrorBeautifully(error, userConfigurati
 		userConfigurations
 	);
 
+	let errorToPrintTheSimplyWay = error;
+
 	const errorParser = choosePluginErrorParseAccordingToInvolvedPluginName(error.plugin);
 	if (typeof errorParser === 'function') {
 
 		const parsedStructure = errorParser(error);
 		if (parsedStructure) {
-			printErrorTheComplexWay(error.plugin, parsedStructure, configurations);
-			return;
+			if (parsedStructure.shouldStillUseTheSimplePrinter) {
+				errorToPrintTheSimplyWay = parsedStructure;
+			} else {
+				printErrorTheComplexWay(error.plugin, parsedStructure, configurations);
+				return;
+			}
 		}
 	}
 
-	printErrorTheSimpleWay(error, configurations);
+	printErrorTheSimpleWay(errorToPrintTheSimplyWay, configurations);
 };
 
 
@@ -60,6 +66,8 @@ function choosePluginErrorParseAccordingToInvolvedPluginName(pluginName) {
 			return require('./gulp-plugin-error-parsers/gulp-less-error-parser');
 		case 'gulp-sass':
 			return require('./gulp-plugin-error-parsers/gulp-sass-error-parser');
+		case 'gulp-postcss':
+			return require('./gulp-plugin-error-parsers/gulp-postcss-error-parser');
 		default:
 			console.log(`\nUnspported plugin "${pluginName}"`);
 			return function() { return null; };

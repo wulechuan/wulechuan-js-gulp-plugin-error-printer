@@ -33,7 +33,7 @@ module.exports = {
         'no-param-reassign': 0,
         quotes: [ 'error', 'single' ],
         semi: [ 'error', 'always' ],
-        'max-statements': [ 'warn', 32 ],
+        'max-statements': [ 'warn', 64 ],
         'multiline-ternary': [ 'error', 'always-multiline' ],
         'no-console': [ 0 ],
         'new-parens': [ 0 ],
@@ -55,8 +55,8 @@ module.exports = {
                     'object': true,
                 },
                 AssignmentExpression: {
-                    array: true,
-                    object: true,
+                    array: false,
+                    object: false,
                 }
             },
             {
