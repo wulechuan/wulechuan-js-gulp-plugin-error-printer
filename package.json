@@ -1,9 +1,9 @@
 {
   "name": "@wulechuan/javascript-gulp-plugin-error-printer",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "author": "wulechuan <wulechuan@live.com>",
   "license": "WTFPL",
-  "description": "Parse and print gulp {PluginError} beautifully.",
+  "description": "[PROJECT DEPRECATED]",
   "keywords": [
     "gulp",
     "PluginError",
@@ -32,12 +32,12 @@
     "gulp-stylus": "^2.7.0",
     "gulp-uglify": "^3.0.2"
   },
-  "homepage": "https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins#readme",
+  "homepage": "https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins-PROJCET-DEPRECATED#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins.git"
+    "url": "git+https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins-PROJCET-DEPRECATED.git"
   },
   "bugs": {
-    "url": "https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins/issues"
+    "url": "https://github.com/wulechuan/wulechuan-js-printer-of-errors-of-gulp-plugins-PROJCET-DEPRECATED/issues"
   }
 }
