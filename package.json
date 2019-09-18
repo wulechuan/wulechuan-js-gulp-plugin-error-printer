@@ -1,9 +1,9 @@
 {
   "name": "@wulechuan/javascript-gulp-plugin-error-printer",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "author": "wulechuan <wulechuan@live.com>",
   "license": "WTFPL",
-  "description": "[PROJECT DEPRECATED]",
+  "description": "[PROJECT DEPRECATED] Please refer to \"@wulechuan/printer-for-errors-of-gulp-plugins\".",
   "keywords": [
     "gulp",
     "PluginError",
